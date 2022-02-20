@@ -1,2 +1,2 @@
-export { default as Slide } from "./Slide";
-export { default as Carousel } from "./Carousel";
+export { Slide } from "./Slide";
+export { Carousel } from "./Carousel";
