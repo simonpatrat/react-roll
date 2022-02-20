@@ -9,7 +9,7 @@ import {
 
 import type { SlideProps } from "./Slide.types";
 
-export const Slide = memo(
+const Slide = memo(
   ({
     id,
     className,
@@ -109,3 +109,5 @@ export const Slide = memo(
     );
   }
 );
+
+export default Slide;
