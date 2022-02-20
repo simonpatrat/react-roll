@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/simonpatrat"
   },
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Simple carousel components for React",
   "author": "Simon Patrat",
   "license": "MIT",

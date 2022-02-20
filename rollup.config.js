@@ -14,6 +14,7 @@ export default [
         file: packageJson.main,
         format: "cjs",
         sourcemap: true,
+        name: "react-roll",
       },
       {
         file: packageJson.module,
