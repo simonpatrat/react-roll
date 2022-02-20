@@ -1,0 +1,93 @@
+.r-r__carousel {
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  margin: 16px 0;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.r-r__track {
+  display: flex;
+  flex-wrap: nowrap;
+  cursor: ew-resize;
+}
+
+.r-r__slide {
+  transition: all 400ms ease;
+  outline: none;
+  // TODO: Do not block user interaction when not transitioning
+  //   pointer-events: none !important;
+  user-select: none !important;
+  // background: cadetblue;
+
+  &--active {
+  }
+}
+
+.r-r__carousel--debug {
+  .r-r__slide--active {
+    box-shadow: inset 0 0 0 2px blue;
+  }
+  .r-r__slide {
+    &:focus {
+      background: yellow;
+    }
+  }
+}
+
+.r-r__controls {
+  padding: 8px;
+
+  > button {
+    margin: 0 8px;
+  }
+}
+
+.r-r__dots {
+  display: flex;
+  padding: 8px;
+
+  .r-r__dot {
+    padding: 4px;
+
+    & > * {
+      background: transparent;
+      border: 1px solid #000;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      display: flex;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 200ms ease;
+    }
+
+    &--active {
+      & > * {
+        background: #000;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.debug-mode {
+  padding: 24px;
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .debug-box {
+    margin: 8px;
+    padding: 12px;
+    border: 1px solid #000;
+    width: calc(100% / 3);
+  }
+}
