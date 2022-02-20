@@ -1,5 +1,8 @@
 {
-  "name": "react-roll",
+  "name": "@simonpatrat/react-roll",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/simonpatrat"
+  },
   "version": "1.0.0",
   "description": "Simple light carousel components for React",
   "author": "Simon Patrat",
