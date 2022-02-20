@@ -5,6 +5,6 @@ Simple carousel components for React
 ### Todo
 
 - [x] Typescript
-- [] Documentation
-- [] Tests
-- [] scss support
+- [ ] Documentation
+- [ ] Tests
+- [ ] scss support
