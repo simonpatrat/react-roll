@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
-import { Slide } from "../Slide";
+import Slide from "../Slide";
 import { cls } from "../../lib/utils";
 import { importTranslations, getTranslation } from "../../lib/translations";
 import {
@@ -46,7 +46,7 @@ export interface CarouselProps {
   slidePadding?: string;
 }
 
-export const Carousel = ({
+const Carousel = ({
   children,
   className,
   itemClassName,

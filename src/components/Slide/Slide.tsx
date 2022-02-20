@@ -9,12 +9,12 @@ import {
 
 import { SlideItem } from "../../lib/useSlides";
 
-interface LoadedSlideItem extends Partial<SlideItem> {
+export interface LoadedSlideItem extends Partial<SlideItem> {
   isActive: boolean;
   width: number;
 }
 
-interface SlideProps extends Partial<SlideItem> {
+export interface SlideProps extends Partial<SlideItem> {
   id: string;
   isActive: boolean;
   width: number;
@@ -30,7 +30,7 @@ interface SlideProps extends Partial<SlideItem> {
   pointerEvents?: "none" | undefined;
 }
 
-export const Slide = memo(
+const Slide = memo(
   ({
     id,
     className,
