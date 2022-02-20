@@ -30,7 +30,7 @@ interface SlideProps extends Partial<SlideItem> {
   pointerEvents?: "none" | undefined;
 }
 
-export const Slide = memo(
+const Slide = memo(
   ({
     id,
     className,

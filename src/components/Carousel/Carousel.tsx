@@ -46,7 +46,7 @@ export interface CarouselProps {
   slidePadding?: string;
 }
 
-export const Carousel = ({
+const Carousel = ({
   children,
   className,
   itemClassName,
