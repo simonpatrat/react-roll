@@ -29,6 +29,7 @@ export default [
       typescript({ tsconfig: "./tsconfig.json" }),
       postcss(),
     ],
+    external: [/\.(css|less|scss)$/, "react", "react-dom"],
   },
   {
     input: "dist/esm/types/index.d.ts",
