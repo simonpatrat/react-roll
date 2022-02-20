@@ -27,7 +27,11 @@ export default [
       resolve(),
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
-      postcss(),
+      postcss({
+        extract: false,
+        modules: true,
+        use: ["sass"],
+      }),
     ],
     external: [/\.(css|less|scss)$/, "react", "react-dom"],
   },
