@@ -13,8 +13,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "emitDeclarationOnly": true,
-    "isolatedModules": true
+    "emitDeclarationOnly": false
   },
   "exclude": [
     "dist",
