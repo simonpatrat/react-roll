@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_simonpatrat_react_roll=self.webpackChunk_simonpatrat_react_roll||[]).push([[458],{"./src/lib/translations/translations.types.ts":(__unused_webpack_module,__webpack_exports__,__webpack_require__)=>{__webpack_require__.r(__webpack_exports__)}}]);
