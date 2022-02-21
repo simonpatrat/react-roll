@@ -49,7 +49,7 @@ const Card = () => {
         />
       </div>
       <div className="card__header">
-        <h3 className="card__title">Hello World</h3>
+        <h3 className="card__title">Lorem ipsum dolor sit.</h3>
       </div>
       <div className="card__body">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus

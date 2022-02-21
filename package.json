@@ -1,5 +1,6 @@
 {
   "name": "@simonpatrat/react-roll",
+  "homepage": "http://simonpatrat.github.io/react-roll",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/simonpatrat"
   },
@@ -10,8 +11,8 @@
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
-    "storybook:export": "build-storybook",
-    "build-storybook": "build-storybook -o rr-storybook-build"
+    "build-storybook": "build-storybook -o storybook-static",
+    "deploy-storybook": "gh-pages -d storybook-static"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
@@ -32,6 +33,7 @@
     "@types/react": "^17.0.39",
     "babel-loader": "^8.2.3",
     "babel-preset-react-app": "^10.0.1",
+    "gh-pages": "^3.2.3",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.6",
     "react": "^17.0.2",
