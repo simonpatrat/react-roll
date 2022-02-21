@@ -11,8 +11,8 @@
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o storybook-static",
-    "deploy-storybook": "gh-pages -d storybook-static"
+    "storybook-publish": "build-storybook -o storybook-static",
+    "storybook-deploy": "npm run storybook-publish && gh-pages -d storybook-static"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
