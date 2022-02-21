@@ -29,13 +29,8 @@ export default [
       typescript({
         useTsconfigDeclarationDir: true,
       }),
-      postcss({
-        extract: false,
-        modules: true,
-        use: ["sass"],
-      }),
+      postcss(),
     ],
-    external: [/\.(css|less|scss)$/, "react", "react-dom"],
   },
   // {
   //   input: "dist/esm/types/index.d.ts",
