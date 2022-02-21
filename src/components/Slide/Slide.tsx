@@ -7,7 +7,7 @@ import {
   CAROUSEL_ACTIVE_SLIDE_CLASSNAME,
 } from "../../lib/constants";
 
-import type { SlideProps } from "./Slide.types";
+import { SlideProps } from "./Slide.types";
 
 const Slide = memo(
   ({

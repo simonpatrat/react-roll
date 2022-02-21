@@ -1,4 +1,4 @@
-import type { SlideItem } from "../../lib/useSlides";
+import { SlideItem } from "../../lib/useSlides";
 
 export interface CarouselResponsivePropRules {
   numVisibleSlides: number;

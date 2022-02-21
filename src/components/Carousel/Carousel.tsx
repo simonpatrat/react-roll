@@ -18,10 +18,7 @@ import {
   CAROUSEL_CLASSNAME_DEBUG_MODE,
 } from "../../lib/constants";
 
-import type {
-  CarouselProps,
-  CarouselResponsivePropRules,
-} from "./Carousel.types";
+import { CarouselProps, CarouselResponsivePropRules } from "./Carousel.types";
 
 const Carousel = ({
   children,
