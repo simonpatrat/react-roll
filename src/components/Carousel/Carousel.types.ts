@@ -1,4 +1,5 @@
 import { SlideItem } from "../../lib/useSlides";
+import { Translations } from "../../lib/translations/translations.types";
 
 export interface CarouselResponsivePropRules {
   numVisibleSlides: number;
@@ -26,4 +27,5 @@ export interface CarouselProps {
   transitionDuration?: number;
   debugMode?: boolean;
   slidePadding?: string;
+  translations?: Translations;
 }

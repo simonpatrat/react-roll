@@ -11,12 +11,16 @@ import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
 import { cls } from "../../lib/utils";
-import { importTranslations, getTranslation } from "../../lib/translations";
+import {
+  // importTranslations,
+  getTranslation,
+} from "../../lib/translations";
 import {
   CAROUSEL_CLASSNAME,
   CAROUSEL_TRACK_CLASSNAME,
   CAROUSEL_CLASSNAME_DEBUG_MODE,
 } from "../../lib/constants";
+import { defaultTranslationsMessages } from "../../lib/translations";
 
 import { CarouselProps, CarouselResponsivePropRules } from "./Carousel.types";
 
@@ -36,6 +40,7 @@ const Carousel = ({
   fallback, // TODO: FallbackComponent for SSR etc.
   debugMode = false,
   slidePadding,
+  translations,
 }: CarouselProps) => {
   // const offset = carouselTrackRef * 2 - 1;
   const didMount = useRef(false);
@@ -54,7 +59,7 @@ const Carousel = ({
     goToNext,
     lastSlideIndex,
   } = useSlides(children, initialIndex, loop, infinite);
-  const [translations, setTranslations] = useState({});
+  // const [translations, setTranslations] = useState({});
   const [trackTranslateXValue, setTrackTranslateXValue] = useState(0);
   const [slidesTabIndex, setSlidesTabIndex] = useState(0);
   const [isTouchInteracting, setIsTouchInteracting] = useState<boolean>(false);
@@ -176,13 +181,19 @@ const Carousel = ({
     };
   }, [enhancedMediaQueryList, handleMediaQueryChange]);
 
-  useEffect(() => {
-    (async function fetchTranslations() {
-      const trans = await importTranslations(locale);
+  const mergedTranslations = {
+    ...defaultTranslationsMessages,
+    ...translations,
+  };
 
-      setTranslations(trans);
-    })();
-  }, [locale]);
+  // TODO: translation dynamic import capability ?
+  // useEffect(() => {
+  //   (async function fetchTranslations() {
+  //     const trans = await importTranslations(locale);
+
+  //     setTranslations(trans);
+  //   })();
+  // }, [locale]);
 
   useEffect(() => {
     if (didMount.current) {
@@ -402,14 +413,14 @@ const Carousel = ({
               aria-label={getTranslation(
                 locale,
                 "controls.buttons.previous.ariaLabel",
-                translations
+                mergedTranslations
               )}
               className="r-r__button r-r__buton--previous"
             >
               {getTranslation(
                 locale,
                 "controls.buttons.previous.label",
-                translations
+                mergedTranslations
               )}
             </button>
             <button
@@ -418,14 +429,14 @@ const Carousel = ({
               aria-label={getTranslation(
                 locale,
                 "controls.buttons.next.ariaLabel",
-                translations
+                mergedTranslations
               )}
               className="r-r__button r-r__button--next"
             >
               {getTranslation(
                 locale,
                 "controls.buttons.next.label",
-                translations
+                mergedTranslations
               )}
             </button>
           </div>

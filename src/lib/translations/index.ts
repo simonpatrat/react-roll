@@ -1,11 +1,16 @@
 import { get } from "../utils";
 
-export { en } from "./en";
-export { fr } from "./fr";
+import { en } from "./en";
+import { fr } from "./fr";
+
+export const defaultTranslationsMessages = {
+  en,
+  fr,
+};
 
 const DEFAULT_LOCALE = "en";
 
-type Translations = Record<string, unknown>;
+import { Translations } from "./translations.types";
 
 const loadedTranslationsbyLocale: Translations = {};
 
