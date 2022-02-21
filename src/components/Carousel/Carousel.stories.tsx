@@ -7,6 +7,25 @@ import { SlideItem } from "../../lib/useSlides";
 
 const locale = "en";
 
+const ImageBox = () => {
+  const imgUrl = `https://picsum.photos/1024/576?random=${
+    Math.floor(Math.random() * 100) + 1
+  }`;
+
+  return (
+    <div>
+      <img
+        src={imgUrl}
+        alt=""
+        style={{
+          maxWidth: "100%",
+          height: "auto",
+        }}
+      />
+    </div>
+  );
+};
+
 const Card = () => {
   const imgUrl = `https://picsum.photos/768/432?random=${
     Math.floor(Math.random() * 100) + 1
@@ -70,11 +89,23 @@ export default {
   component: Carousel,
 } as Meta;
 
-const Template: Story<CarouselProps> = (args) => <Carousel {...args} />;
+const Template1: Story<CarouselProps> = (args) => <Carousel {...args} />;
 
-export const Playground = Template.bind({});
+const Template2: Story<CarouselProps> = (args) => (
+  <div
+    style={{
+      maxWidth: "800px",
+      margin: "0 auto",
+    }}
+  >
+    <Carousel {...args} />
+  </div>
+);
 
-Playground.args = {
+export const FullyFeatured = Template1.bind({});
+export const Simple = Template2.bind({});
+
+FullyFeatured.args = {
   className: "my-carousel",
   // initialIndex={2}
   onChangeSlide: handleChangeSlide,
@@ -113,43 +144,18 @@ Playground.args = {
   ],
 };
 
-// export const FullFeatured = () => (
-//   <Carousel
-//     className="my-carousel"
-//     // initialIndex={2}
-//     onChangeSlide={handleChangeSlide}
-//     numVisibleSlides={4}
-//     // infinite
-//     locale={locale}
-//     autoFocus
-//     slidePadding={`8px`}
-//     responsive={{
-//       9999: {
-//         numVisibleSlides: 4,
-//       },
-//       1366: {
-//         numVisibleSlides: 3,
-//       },
-//       1024: {
-//         numVisibleSlides: 2,
-//         paddingRight: "20%",
-//       },
-//       768: {
-//         numVisibleSlides: 1,
-//         paddingRight: "30%",
-//       },
-//     }}
-//     // debugMode
-//   >
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//     <Card />
-//   </Carousel>
-// );
+Simple.args = {
+  className: "my-carousel-2",
+  onChangeSlide: handleChangeSlide,
+  numVisibleSlides: 1,
+  children: [
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+    <ImageBox></ImageBox>,
+  ],
+};

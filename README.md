@@ -1,12 +1,15 @@
 # React Roll
 
-Simple carousel component for React
+## Simple carousel component for React
 
-### Demo and documentation: [https://simonpatrat.github.io/react-roll](https://simonpatrat.github.io/react-roll).
+#### [Storybook demo](https://simonpatrat.github.io/react-roll).
+
+---
 
 ### Todo
 
 - [x] Typescript
+- [x] scss support
+- [x] Storybook
 - [ ] Documentation
 - [ ] Tests
-- [ ] scss support
