@@ -46,9 +46,8 @@ const Carousel = ({
   const didMount = useRef(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const carouselTrackRef = useRef<HTMLDivElement>(null);
-  const carouselOriginCoordinates = useRef<null | { x: number; y: number }>(
-    null
-  );
+  const carouselOriginCoordinates =
+    useRef<null | { x: number; y: number }>(null);
   const lastTranslate = useRef<null | { x: number; y: number }>(null);
 
   const {
@@ -151,6 +150,10 @@ const Carousel = ({
     },
     []
   );
+
+  useEffect(() => {
+    setCurrentNumberOfVisibleSlides(numVisibleSlides);
+  }, [numVisibleSlides]);
 
   useEffect(() => {
     if (enhancedMediaQueryList) {

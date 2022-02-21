@@ -12,11 +12,16 @@ export type CarouselResponsiveProp = Record<
 >;
 
 export interface CarouselProps {
+  /** React children */
   children?: React.ReactNode;
+  /** class name */
   className?: string;
+  /** class name for carousel item (slide) */
   itemClassName?: string;
+  /** index of the slide the carousel should begin with */
   initialIndex?: number;
   infinite?: boolean;
+  /** Loop from end to start and start to end */
   loop?: boolean;
   onChangeSlide?: (newSlide: SlideItem) => void;
   numVisibleSlides?: number;
