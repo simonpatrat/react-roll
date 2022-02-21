@@ -1,5 +1,8 @@
 import { get } from "../utils";
 
+export { en } from "./en";
+export { fr } from "./fr";
+
 const DEFAULT_LOCALE = "en";
 
 type Translations = Record<string, unknown>;
