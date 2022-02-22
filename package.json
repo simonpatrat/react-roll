@@ -1,10 +1,7 @@
 {
   "name": "@simonpatrat/react-roll",
   "homepage": "http://simonpatrat.github.io/react-roll",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/simonpatrat"
-  },
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "Simple carousel components for React",
   "author": "Simon Patrat",
   "license": "MIT",
@@ -12,7 +9,8 @@
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
     "storybook-publish": "build-storybook -o storybook-static",
-    "storybook-deploy": "npm run storybook-publish && gh-pages -d storybook-static"
+    "storybook-deploy": "npm run storybook-publish && gh-pages -d storybook-static",
+    "test": "echo \"No test specified\""
   },
   "peerDependencies": {
     "react": ">=17.0.0",
@@ -53,8 +51,19 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "files": [
+    "src",
     "dist"
   ],
   "types": "dist/index.d.ts",
-  "dependencies": {}
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonpatrat/react-roll.git"
+  },
+  "keywords": [
+    "react",
+    "carousel"
+  ],
+  "bugs": {
+    "url": "https://github.com/simonpatrat/react-roll/issues"
+  }
 }

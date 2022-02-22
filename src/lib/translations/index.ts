@@ -2,10 +2,12 @@ import { get } from "../utils";
 
 import { en } from "./en";
 import { fr } from "./fr";
+import { es } from "./es";
 
 export const defaultTranslationsMessages = {
   en,
   fr,
+  es,
 };
 
 const DEFAULT_LOCALE = "en";
