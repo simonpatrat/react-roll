@@ -11,10 +11,7 @@ import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
 import { cls } from "../../lib/utils";
-import {
-  // importTranslations,
-  getTranslation,
-} from "../../lib/translations";
+import { getTranslation } from "../../lib/translations";
 import {
   CAROUSEL_CLASSNAME,
   CAROUSEL_TRACK_CLASSNAME,
@@ -58,7 +55,7 @@ const Carousel = ({
     goToNext,
     lastSlideIndex,
   } = useSlides(children, initialIndex, loop, infinite);
-  // const [translations, setTranslations] = useState({});
+
   const [trackTranslateXValue, setTrackTranslateXValue] = useState(0);
   const [slidesTabIndex, setSlidesTabIndex] = useState(0);
   const [isTouchInteracting, setIsTouchInteracting] = useState<boolean>(false);
@@ -161,7 +158,6 @@ const Carousel = ({
         const { mq, rules } = el;
 
         if (mq.matches) {
-          // console.log("MQ matches: ", mq.matches, bp);
           const { numVisibleSlides, ...cssRules } = rules;
           setCurrentNumberOfVisibleSlides(numVisibleSlides);
           setMediaQueryCssStyles({ ...cssRules });
@@ -189,15 +185,6 @@ const Carousel = ({
     ...translations,
   };
 
-  // TODO: translation dynamic import capability ?
-  // useEffect(() => {
-  //   (async function fetchTranslations() {
-  //     const trans = await importTranslations(locale);
-
-  //     setTranslations(trans);
-  //   })();
-  // }, [locale]);
-
   useEffect(() => {
     if (didMount.current) {
       if (
@@ -215,11 +202,6 @@ const Carousel = ({
   const disableTransition = useCallback(() => {
     setTrackTransition("none");
   }, []);
-
-  // const enableTransition = useCallback(() => {
-  //   console.log("=======> enabling transition");
-  //   setTrackTransition(`transform ${trackTransition}ms ease-out`);
-  // }, [trackTransition]);
 
   const handleDragStart = useCallback(
     (event) => {

@@ -21,12 +21,9 @@
   // TODO: Do not block user interaction when not transitioning
   //   pointer-events: none !important;
   user-select: none !important;
-  // background: cadetblue;
-
-  &--active {
-  }
 }
 
+// Used only in debug mode
 .r-r__carousel--debug {
   .r-r__slide--active {
     box-shadow: inset 0 0 0 2px blue;

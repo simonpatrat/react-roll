@@ -10,7 +10,8 @@
     "storybook": "start-storybook -p 6006",
     "storybook-publish": "build-storybook -o storybook-static",
     "storybook-deploy": "npm run storybook-publish && gh-pages -d storybook-static",
-    "test": "echo \"No test specified\""
+    "test": "echo \"No test specified\"",
+    "prepublishOnly": "npm run build && npm run storybook-publish"
   },
   "peerDependencies": {
     "react": ">=17.0.0",

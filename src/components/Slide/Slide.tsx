@@ -52,7 +52,6 @@ const Slide = memo(
           isCarouselTrackTransitionend &&
           tabIndex === 0
         ) {
-          // debugger;
           slideRef.current.focus();
         }
       },
