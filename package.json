@@ -1,7 +1,7 @@
 {
   "name": "@simonpatrat/react-roll",
   "homepage": "http://simonpatrat.github.io/react-roll",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "Simple carousel components for React",
   "author": "Simon Patrat",
   "license": "MIT",
