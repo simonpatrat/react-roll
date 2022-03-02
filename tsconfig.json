@@ -2,15 +2,20 @@
   "compilerOptions": {
     "rootDir": "src",
     "declaration": true,
-    "declarationDir": "dist",
+    "outDir": "dist",
     "module": "esnext",
     "target": "es2019",
-    "lib": ["dom", "es2015"],
+    "lib": ["dom", "esnext"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "paths": {
+      "@simonpatrat/react-roll": ["./src"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": [
