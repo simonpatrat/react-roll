@@ -10,6 +10,7 @@ import "./carousel.scss";
 import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
+import ControlButton from "../ControlButton";
 import { cls } from "../../lib/utils";
 import { getTranslation } from "../../lib/translations";
 import {
@@ -392,38 +393,32 @@ const Carousel = ({
             </div>
           </div>
           <div className="r-r__controls">
-            <button
-              type="button"
+            <ControlButton
               onClick={handleClickPrevious}
-              aria-label={getTranslation(
-                locale,
-                "controls.buttons.previous.ariaLabel",
-                mergedTranslations
-              )}
-              className="r-r__button r-r__buton--previous"
-            >
-              {getTranslation(
+              label={getTranslation(
                 locale,
                 "controls.buttons.previous.label",
                 mergedTranslations
               )}
-            </button>
-            <button
-              type="button"
-              onClick={handleClickNext}
-              aria-label={getTranslation(
+              ariaLabel={getTranslation(
                 locale,
-                "controls.buttons.next.ariaLabel",
+                "controls.buttons.previous.ariaLabel",
                 mergedTranslations
               )}
-              className="r-r__button r-r__button--next"
-            >
-              {getTranslation(
+            />
+            <ControlButton
+              onClick={handleClickNext}
+              label={getTranslation(
                 locale,
                 "controls.buttons.next.label",
                 mergedTranslations
               )}
-            </button>
+              ariaLabel={getTranslation(
+                locale,
+                "controls.buttons.next.ariaLabel",
+                mergedTranslations
+              )}
+            />
           </div>
           <div className="r-r__dots">
             {baseSlideList.map((slide: SlideItem, index) => {
