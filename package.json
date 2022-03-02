@@ -5,6 +5,9 @@
   "description": "Simple carousel components for React",
   "author": "Simon Patrat",
   "license": "MIT",
+  "engines": {
+    "node": ">=10"
+  },
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",

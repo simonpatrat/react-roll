@@ -3,6 +3,7 @@
     "rootDir": "src",
     "declaration": true,
     "outDir": "dist",
+    "declarationDir": "./dist/types",
     "module": "esnext",
     "target": "es2019",
     "lib": ["dom", "esnext"],
