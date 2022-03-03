@@ -54,6 +54,7 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "source": "src/index.ts",
   "files": [
     "src",
     "dist",

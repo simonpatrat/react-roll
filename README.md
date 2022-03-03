@@ -20,7 +20,7 @@ yarn add @simonpatrat/react-roll
 
 ```jsx
 import React from "react";
-import { Carousel } from "@simonpatrat/react-roll";
+import { Carousel } from "@simonpatrat/react-roll/dist";
 
 export default function MyCarousel() {
   return (
