@@ -85,6 +85,7 @@ const Slide = memo(
       <div
         ref={slideRef}
         data-id={id}
+        data-testid={id}
         data-index={index}
         role="group"
         aria-label={`slide ${index + 1}`}
