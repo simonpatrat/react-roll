@@ -1,8 +1,31 @@
-name: "coverage"
-on: [push]
+name: coverage badge
+on:
+  push:
+    branches: [main]
+
 jobs:
-  coverage:
+  checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: ArtiomTr/jest-coverage-report-action@v2
+      - uses: actions/checkout@v2
+
+      - name: Install modules
+        run: yarn --prefer-offline
+
+      - name: Run unit tests with coverage
+        run: |
+          SUMMARY="$(yarn test --coverage --coverageReporters=text-summary | tail -3 | head -1)"
+          TOKENS=($SUMMARY)
+          echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
+
+      - name: Create Coverage Badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: c88ec2d98b0167edcab2f0ba52646cc1
+          filename: react-roll_coverage.json
+          label: coverage
+          message: ${{ env.COVERAGE }}
+          namedLogo: jest
+          color: blue
+          logoColor: lightblue

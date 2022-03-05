@@ -1,4 +1,4 @@
-# React Roll
+# React Roll [![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/<YourUsername>/<gist_id>/raw/<your-repo>__heads_main.json)]
 
 ## Simple carousel component for React
 
