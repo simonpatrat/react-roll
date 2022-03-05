@@ -65,5 +65,4 @@ export default function MyCarousel() {
 - [x] Typescript
 - [x] scss support
 - [x] Storybook
-- [ ] Documentation
-- [ ] Tests
+- [x] Tests
