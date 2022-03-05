@@ -1,4 +1,4 @@
-name: coverage badge
+name: CI
 on:
   push:
     branches: [main]
