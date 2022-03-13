@@ -9,7 +9,12 @@ describe("ControlButton", () => {
     const handleClickMock = jest.fn();
 
     await render(
-      <ControlButton label="Hello" direction="next" onClick={handleClickMock} />
+      <ControlButton
+        label="Hello"
+        direction="next"
+        buttonType="text"
+        onClick={handleClickMock}
+      />
     );
 
     userEvent.click(screen.getByText("Hello"));

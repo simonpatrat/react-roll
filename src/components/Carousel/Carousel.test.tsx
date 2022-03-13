@@ -71,7 +71,7 @@ describe("Carousel", () => {
     expect(ariaHidden).toBe("false");
   });
 
-  it.only("Should set active slide when clicking on naviagation button", async () => {
+  it("Should set active slide when clicking on naviagation button", async () => {
     const handleClickMock = jest.fn();
 
     const { debug } = await render(
