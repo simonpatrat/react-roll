@@ -9,6 +9,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "dev": "rollup -c -w",
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
     "storybook-publish": "build-storybook -o storybook-static",

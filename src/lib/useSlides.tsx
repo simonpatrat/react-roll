@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CAROUSEL_SLIDE_CLASSNAME } from "./constants";
 
 export type SlideItem = {
@@ -81,6 +81,16 @@ export const useSlides = (
 
   const [lastSlideIndex, setLastSlideIndex] = useState(currentIndex);
 
+  const [hasReachedLastSlide, setHasReachedLastSlide] = useState(false);
+
+  useEffect(() => {
+    if (!slides[currentSlide.index + 1]) {
+      setHasReachedLastSlide(true);
+    } else {
+      setHasReachedLastSlide(false);
+    }
+  }, [currentSlide?.index, setHasReachedLastSlide]);
+
   const goTo = (itemIndex: number): void => {
     setLastSlideIndex(currentSlide.index);
     setCurrentSlide(slides[itemIndex]);
@@ -114,5 +124,6 @@ export const useSlides = (
     goToNext,
     goToPrevious,
     lastSlideIndex,
+    hasReachedLastSlide,
   };
 };

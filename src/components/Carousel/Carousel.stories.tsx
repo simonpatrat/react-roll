@@ -115,9 +115,6 @@ FullyFeatured.args = {
   autoFocus: true,
   slidePadding: `8px`,
   responsive: {
-    9999: {
-      numVisibleSlides: 4,
-    },
     1366: {
       numVisibleSlides: 3,
     },
