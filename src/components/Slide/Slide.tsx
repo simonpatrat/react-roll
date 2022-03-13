@@ -9,6 +9,7 @@ import {
 
 import { SlideProps } from "./Slide.types";
 
+// eslint-disable-next-line react/display-name
 const Slide = memo(
   ({
     id,
@@ -20,6 +21,7 @@ const Slide = memo(
     width,
     autoFocus,
     carouselTrackRef,
+    // eslint-disable-next-line no-unused-vars
     debugMode = false,
     slidePadding = "0",
     tabIndex = 0,

@@ -4,6 +4,8 @@ import { en } from "./en";
 import { fr } from "./fr";
 import { es } from "./es";
 
+import { Translations } from "./translations.types";
+
 export const defaultTranslationsMessages = {
   en,
   fr,
@@ -11,8 +13,6 @@ export const defaultTranslationsMessages = {
 };
 
 const DEFAULT_LOCALE = "en";
-
-import { Translations } from "./translations.types";
 
 const loadedTranslationsbyLocale: Translations = {};
 
@@ -32,10 +32,10 @@ export const importTranslations = async (locale: string) => {
     if (locale in transModule) {
       loadedTranslationsbyLocale[locale] = transModule[locale];
       return transModule[locale];
-    } else {
-      throw new Error("No translation module found for " + locale);
     }
+    throw new Error(`No translation module found for ${locale}`);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.warn(
       `${error}
         Loading default translation file instead.

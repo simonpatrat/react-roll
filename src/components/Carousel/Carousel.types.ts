@@ -1,3 +1,4 @@
+import React from "react";
 import { SlideItem } from "../../lib/useSlides";
 import { Translations } from "../../lib/translations/translations.types";
 
@@ -18,6 +19,7 @@ export interface CarouselProps {
   initialIndex?: number;
   infinite?: boolean;
   loop?: boolean;
+  // eslint-disable-next-line no-unused-vars
   onChangeSlide?: (newSlide: SlideItem) => void;
   numVisibleSlides?: number;
   locale?: string;

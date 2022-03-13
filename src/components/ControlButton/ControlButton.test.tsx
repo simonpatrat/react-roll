@@ -8,7 +8,9 @@ describe("ControlButton", () => {
   it("should trigger a click handler when user clicks on button", async () => {
     const handleClickMock = jest.fn();
 
-    await render(<ControlButton label="Hello" onClick={handleClickMock} />);
+    await render(
+      <ControlButton label="Hello" direction="next" onClick={handleClickMock} />
+    );
 
     userEvent.click(screen.getByText("Hello"));
 

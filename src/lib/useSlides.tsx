@@ -25,6 +25,7 @@ const createSlide = (
 const createSlidesFromChildren = (
   children: React.ReactNode,
   currentIndex: number,
+  // eslint-disable-next-line no-unused-vars
   infinite: boolean
 ): SlideItem[] | [] => {
   if (!children) {
@@ -34,7 +35,7 @@ const createSlidesFromChildren = (
 
   if (arrayChildren?.length > 0) {
     return React.Children.map(arrayChildren, (child, index) => {
-      if (!!child) {
+      if (child) {
         const isCurrent = index === currentIndex;
         return createSlide(child, index, isCurrent);
       }
@@ -96,9 +97,9 @@ export const useSlides = (
     setCurrentSlide(slides[itemIndex]);
   };
   const goToNext = (): void => {
-    const lastSlideIndex = slides[slides.length - 1].index;
+    const lastIndex = slides[slides.length - 1].index;
     const nextIndex = currentSlide.index + 1;
-    if (nextIndex <= lastSlideIndex) {
+    if (nextIndex <= lastIndex) {
       goTo(nextIndex);
     } else if (loop) {
       goTo(0);
@@ -106,12 +107,12 @@ export const useSlides = (
   };
 
   const goToPrevious = (): void => {
-    const lastSlideIndex = slides[slides.length - 1].index;
+    const lastIndex = slides[slides.length - 1].index;
     const previousIndex = currentSlide.index - 1;
     if (previousIndex >= 0) {
       goTo(previousIndex);
     } else if (loop) {
-      goTo(lastSlideIndex);
+      goTo(lastIndex);
     }
   };
 

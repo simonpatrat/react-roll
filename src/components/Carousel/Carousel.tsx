@@ -12,13 +12,16 @@ import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
 import ControlButton from "../ControlButton";
 import { cls } from "../../lib/utils";
-import { getTranslation } from "../../lib/translations";
+
 import {
   CAROUSEL_CLASSNAME,
   CAROUSEL_TRACK_CLASSNAME,
   CAROUSEL_CLASSNAME_DEBUG_MODE,
 } from "../../lib/constants";
-import { defaultTranslationsMessages } from "../../lib/translations";
+import {
+  defaultTranslationsMessages,
+  getTranslation,
+} from "../../lib/translations";
 
 import {
   CarouselProps,
@@ -52,8 +55,9 @@ const Carousel = ({
   const didMount = useRef(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const carouselTrackRef = useRef<HTMLDivElement>(null);
-  const carouselOriginCoordinates =
-    useRef<null | { x: number; y: number }>(null);
+  const carouselOriginCoordinates = useRef<null | { x: number; y: number }>(
+    null
+  );
   const lastTranslate = useRef<null | { x: number; y: number }>(null);
 
   const {
@@ -137,30 +141,30 @@ const Carousel = ({
     : baseSlideList;
 
   const getSlideWidthRatio = useCallback(
-    (slides: SlideItem[]) => {
-      return slides.length / currentNumberOfVisibleSlides;
+    (givenSlides: SlideItem[]) => {
+      return givenSlides.length / currentNumberOfVisibleSlides;
     },
     [currentNumberOfVisibleSlides]
   );
 
   const getTrackTotalWidthPercent = useCallback(
-    (slides: SlideItem[]) => {
-      const ratio = getSlideWidthRatio(slides);
+    (givenSlides: SlideItem[]) => {
+      const ratio = getSlideWidthRatio(givenSlides);
       return ratio * 100;
     },
     [getSlideWidthRatio]
   );
 
-  const getSlideWidthPercent = (slides: SlideItem[]) => {
-    const ratio = getSlideWidthRatio(slides);
+  const getSlideWidthPercent = (givenSlides: SlideItem[]) => {
+    const ratio = getSlideWidthRatio(givenSlides);
     return 100 / currentNumberOfVisibleSlides / ratio;
   };
 
   const handleMediaQueryChange = useCallback(
     (event, rules: CarouselResponsivePropRules) => {
       if (event.matches) {
-        const { numVisibleSlides, ...cssRules } = rules;
-        setCurrentNumberOfVisibleSlides(numVisibleSlides);
+        const { numVisibleSlides: nVSLides, ...cssRules } = rules;
+        setCurrentNumberOfVisibleSlides(nVSLides);
         setMediaQueryCssStyles({ ...cssRules });
       }
     },
@@ -177,8 +181,8 @@ const Carousel = ({
         const { mq, rules } = el;
 
         if (mq.matches) {
-          const { numVisibleSlides, ...cssRules } = rules;
-          setCurrentNumberOfVisibleSlides(numVisibleSlides);
+          const { numVisibleSlides: nVSlides, ...cssRules } = rules;
+          setCurrentNumberOfVisibleSlides(nVSlides);
           setMediaQueryCssStyles({ ...cssRules });
         }
         mq.addEventListener("change", (event) =>
@@ -229,9 +233,10 @@ const Carousel = ({
       if (event.touches) {
         if (event.touches.length > 1) {
           return;
-        } else {
-          event = event.touches[0];
         }
+        const { touches } = event;
+        // eslint-disable-next-line prefer-destructuring, no-param-reassign
+        event = touches[0];
       }
 
       const origin = {
@@ -274,43 +279,37 @@ const Carousel = ({
     ]
   );
 
-  const onDragStop = useCallback(
-    (event) => {
-      const hasOriginPoints = carouselOriginCoordinates.current;
-      if (hasOriginPoints && lastTranslate.current && carouselRef.current) {
-        // enableTransition();
+  const onDragStop = useCallback(() => {
+    const hasOriginPoints = carouselOriginCoordinates.current;
+    if (hasOriginPoints && lastTranslate.current && carouselRef.current) {
+      // enableTransition();
 
-        setTrackTransition(
-          `transform ${getTrackTransitionSpeedMs()}ms ease-out`
-        );
-        let carouselElementWidth = carouselRef.current.offsetWidth;
+      setTrackTransition(`transform ${getTrackTransitionSpeedMs()}ms ease-out`);
+      const carouselElementWidth = carouselRef.current.offsetWidth;
 
-        if (Math.abs(lastTranslate.current.x / carouselElementWidth) > 0.07) {
-          if (lastTranslate.current.x < 0) {
-            goToNext();
-          } else {
-            goToPrevious();
-          }
+      if (Math.abs(lastTranslate.current.x / carouselElementWidth) > 0.07) {
+        if (lastTranslate.current.x < 0) {
+          goToNext();
         } else {
-          console.log("GO TO: ", currentSlide.index);
-          goTo(currentSlide.index);
+          goToPrevious();
         }
+      } else {
+        goTo(currentSlide.index);
       }
-      setIsTouchInteracting(false);
-      carouselOriginCoordinates.current = null;
-      setTimeout(() => {
-        setSlidesTabIndex(0);
-      }, getTrackTransitionSpeedMs() * 2);
-    },
-    [
-      currentSlide.index,
-      goToNext,
-      goToPrevious,
-      goTo,
-      getTrackTransitionSpeedMs,
-      carouselRef,
-    ]
-  );
+    }
+    setIsTouchInteracting(false);
+    carouselOriginCoordinates.current = null;
+    setTimeout(() => {
+      setSlidesTabIndex(0);
+    }, getTrackTransitionSpeedMs() * 2);
+  }, [
+    currentSlide.index,
+    goToNext,
+    goToPrevious,
+    goTo,
+    getTrackTransitionSpeedMs,
+    carouselRef,
+  ]);
 
   const handleClickNext = useCallback(() => {
     goToNext();

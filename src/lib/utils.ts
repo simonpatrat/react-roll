@@ -17,9 +17,11 @@ export const get = (value: any, path: string, defaultValue: any) => {
     .split(".")
     .reduce((acc, v) => {
       try {
+        // eslint-disable-next-line no-param-reassign
         acc = acc[v];
       } catch (e) {
-        console.log("ERROR", e);
+        // eslint-disable-next-line no-console
+        console.error("ERROR getting value", e);
         return defaultValue;
       }
       return acc;

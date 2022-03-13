@@ -1,0 +1,8 @@
+.storybook
+dist
+storybook-static
+types
+coverage
+.eslintrc.js
+**/*.test.tsx
+
