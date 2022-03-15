@@ -29,7 +29,7 @@ import {
   CarouselResponsivePropRules,
 } from "./Carousel.types";
 
-const Carousel = ({
+const Carousel: React.FunctionComponent<CarouselProps> = ({
   children,
   className,
   itemClassName,
@@ -50,7 +50,7 @@ const Carousel = ({
   dotsStyle = "numbers",
   dotsPosition = "center",
   controlButtonType = "icon",
-}: CarouselProps) => {
+}) => {
   // const offset = carouselTrackRef * 2 - 1;
   const didMount = useRef(false);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -79,6 +79,10 @@ const Carousel = ({
 
   const [currentNumberOfVisibleSlides, setCurrentNumberOfVisibleSlides] =
     useState<number>(numVisibleSlides);
+
+  if (baseSlideList.length <= 0) {
+    return fallback || null;
+  }
 
   const distanceBetweenNextSlideAndCurrent = Math.abs(
     currentSlide.index - lastSlideIndex
@@ -334,7 +338,6 @@ const Carousel = ({
 
   const slideWidthPercent = getSlideWidthPercent(slides);
 
-  // FIXME: Redo calculation
   useEffect(() => {
     setTrackTranslateXValue(-(currentSlide.index * slideWidthPercent));
   }, [currentSlide.index, slideWidthPercent]);
@@ -357,212 +360,206 @@ const Carousel = ({
 
   return (
     <>
-      {slides?.length > 0 ? (
-        <div className={`${CAROUSEL_CLASSNAME}-wrapper`}>
-          <div className={`${CAROUSEL_CLASSNAME}-inner-wrapper`}>
+      <div className={`${CAROUSEL_CLASSNAME}-wrapper`}>
+        <div className={`${CAROUSEL_CLASSNAME}-inner-wrapper`}>
+          <div
+            className={carouselClassNames}
+            role="region"
+            aria-label="Carousel"
+            ref={carouselRef}
+            style={{
+              ...mediaQueryCssStyles,
+            }}
+          >
             <div
-              className={carouselClassNames}
-              role="region"
-              aria-label="Carousel"
-              ref={carouselRef}
+              ref={carouselTrackRef}
+              className={CAROUSEL_TRACK_CLASSNAME}
               style={{
-                ...mediaQueryCssStyles,
+                transition: trackTransition,
+                // || currentSlide.index * slideWidthPercent
+                transform: transformValue,
+                width: `${getTrackTotalWidthPercent(slides)}%`,
               }}
+              onTouchStart={handleDragStart}
+              onMouseDown={handleDragStart}
+              onTouchMove={handleDragMove}
+              onMouseMove={handleDragMove}
+              onTouchEnd={onDragStop}
+              onTouchCancel={onDragStop}
+              onMouseUp={onDragStop}
+              onMouseLeave={onDragStop}
             >
-              <div
-                ref={carouselTrackRef}
-                className={CAROUSEL_TRACK_CLASSNAME}
-                style={{
-                  transition: trackTransition,
-                  // || currentSlide.index * slideWidthPercent
-                  transform: transformValue,
-                  width: `${getTrackTotalWidthPercent(slides)}%`,
-                }}
-                onTouchStart={handleDragStart}
-                onMouseDown={handleDragStart}
-                onTouchMove={handleDragMove}
-                onMouseMove={handleDragMove}
-                onTouchEnd={onDragStop}
-                onTouchCancel={onDragStop}
-                onMouseUp={onDragStop}
-                onMouseLeave={onDragStop}
-              >
-                {slides.map((slide: SlideItem, index) => {
-                  const isSlideActive = slide.id === currentSlide?.id;
-                  return (
-                    <Slide
-                      key={`${slide.id}##${index.toString(36)}`}
-                      id={`${slide.id}`}
-                      isActive={isSlideActive}
-                      className={itemClassName}
-                      index={slide.index}
-                      width={slideWidthPercent}
-                      autoFocus={autoFocus}
-                      carouselTrackRef={carouselTrackRef}
-                      debugMode={debugMode}
-                      slidePadding={slidePadding}
-                      tabIndex={slidesTabIndex}
-                      pointerEvents={slidesTabIndex === 0 ? undefined : "none"}
-                    >
-                      {slide.element}
-                    </Slide>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="r-r__controls">
-              {currentSlide?.index > 0 || loop ? (
-                <ControlButton
-                  buttonType={controlButtonType}
-                  direction="previous"
-                  onClick={handleClickPrevious}
-                  label={getTranslation(
-                    locale,
-                    "controls.buttons.previous.label",
-                    mergedTranslations
-                  )}
-                  ariaLabel={getTranslation(
-                    locale,
-                    "controls.buttons.previous.ariaLabel",
-                    mergedTranslations
-                  )}
-                />
-              ) : null}
-              {loop || !hasReachedLastSlide ? (
-                <ControlButton
-                  buttonType={controlButtonType}
-                  direction="next"
-                  onClick={handleClickNext}
-                  label={getTranslation(
-                    locale,
-                    "controls.buttons.next.label",
-                    mergedTranslations
-                  )}
-                  ariaLabel={getTranslation(
-                    locale,
-                    "controls.buttons.next.ariaLabel",
-                    mergedTranslations
-                  )}
-                />
-              ) : null}
-            </div>
-          </div>
-
-          {dots ? (
-            <ul
-              role="tablist"
-              className={cls([
-                "r-r__dots",
-                dotsPosition === "left" && "r-r__dots--left",
-                dotsPosition === "center" && "r-r__dots--center",
-                dotsPosition === "right" && "r-r__dots--right",
-              ])}
-            >
-              {baseSlideList.map((slide: SlideItem, index) => {
+              {slides.map((slide: SlideItem, index) => {
+                const isSlideActive = slide.id === currentSlide?.id;
                 return (
-                  <li
-                    key={`r-r__dot##${slide.id}##${index.toString(36)}`}
-                    className={cls([
-                      "r-r__dot",
-                      slide.index === currentSlide.index && "r-r__dot--active",
-                    ])}
-                    role="presentation"
+                  <Slide
+                    key={`${slide.id}##${index.toString(36)}`}
+                    id={`${slide.id}`}
+                    isActive={isSlideActive}
+                    className={itemClassName}
+                    index={slide.index}
+                    width={slideWidthPercent}
+                    autoFocus={autoFocus}
+                    carouselTrackRef={carouselTrackRef}
+                    debugMode={debugMode}
+                    slidePadding={slidePadding}
+                    tabIndex={slidesTabIndex}
+                    pointerEvents={slidesTabIndex === 0 ? undefined : "none"}
                   >
-                    <button
-                      type="button"
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Go to slide ${slide.index + 1}`}
-                      onClick={() => handleClickDot(slide.index)}
-                      className={cls([
-                        dotsStyle === "numbers" && "with-number",
-                      ])}
-                    >
-                      {dotsStyle === "numbers" ? slide.index + 1 : null}
-                    </button>
-                  </li>
+                    {slide.element}
+                  </Slide>
                 );
               })}
-            </ul>
-          ) : null}
-          {debugMode && (
-            <footer className="debug-mode">
-              <h2>Debug mode</h2>
-              <div className="inner">
-                <div className="debug-box">
-                  <h3>State</h3>
-                  <pre>
-                    {JSON.stringify(
-                      {
-                        isTouchInteracting,
-                        // translations,
-                        trackTranslateXValue,
-                        slidesTabIndex,
-                        currentNumberOfVisibleSlides,
-                        trackTransition,
-                        mediaQueryCssStyles,
-                      },
-                      null,
-                      2
-                    )}
-                  </pre>
-                </div>
-                <div className="debug-box">
-                  <h3>Computed</h3>
-                  <pre>
-                    {JSON.stringify(
-                      {
-                        transformValue,
-                      },
-                      null,
-                      2
-                    )}
-                  </pre>
-                </div>
-                <div className="debug-box">
-                  <h3>Props</h3>
-                  <pre>
-                    {JSON.stringify(
-                      {
-                        className,
-                        itemClassName,
-                        initialIndex,
-                        infinite, // TODO: infinite carousel
-                        loop,
-                        onChangeSlide,
-                        fallback,
-                        numVisibleSlides,
-                        locale,
-                        autoFocus,
-                        responsive,
-                        transitionDuration,
-                        debugMode,
-                      },
-                      null,
-                      2
-                    )}
-                  </pre>
-                </div>
-                <div className="debug-box">
-                  <h3>Current slide</h3>
-                  <pre>
-                    {JSON.stringify(
-                      {
-                        ...currentSlide,
-                        element: undefined,
-                      },
-                      null,
-                      2
-                    )}
-                  </pre>
-                </div>
-              </div>
-            </footer>
-          )}
+            </div>
+          </div>
+          <div className="r-r__controls">
+            {currentSlide?.index > 0 || loop ? (
+              <ControlButton
+                buttonType={controlButtonType}
+                direction="previous"
+                onClick={handleClickPrevious}
+                label={getTranslation(
+                  locale,
+                  "controls.buttons.previous.label",
+                  mergedTranslations
+                )}
+                ariaLabel={getTranslation(
+                  locale,
+                  "controls.buttons.previous.ariaLabel",
+                  mergedTranslations
+                )}
+              />
+            ) : null}
+            {loop || !hasReachedLastSlide ? (
+              <ControlButton
+                buttonType={controlButtonType}
+                direction="next"
+                onClick={handleClickNext}
+                label={getTranslation(
+                  locale,
+                  "controls.buttons.next.label",
+                  mergedTranslations
+                )}
+                ariaLabel={getTranslation(
+                  locale,
+                  "controls.buttons.next.ariaLabel",
+                  mergedTranslations
+                )}
+              />
+            ) : null}
+          </div>
         </div>
-      ) : (
-        fallback || null
-      )}
+
+        {dots ? (
+          <ul
+            role="tablist"
+            className={cls([
+              "r-r__dots",
+              dotsPosition === "left" && "r-r__dots--left",
+              dotsPosition === "center" && "r-r__dots--center",
+              dotsPosition === "right" && "r-r__dots--right",
+            ])}
+          >
+            {baseSlideList.map((slide: SlideItem, index) => {
+              return (
+                <li
+                  key={`r-r__dot##${slide.id}##${index.toString(36)}`}
+                  className={cls([
+                    "r-r__dot",
+                    slide.index === currentSlide.index && "r-r__dot--active",
+                  ])}
+                  role="presentation"
+                >
+                  <button
+                    type="button"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Go to slide ${slide.index + 1}`}
+                    onClick={() => handleClickDot(slide.index)}
+                    className={cls([dotsStyle === "numbers" && "with-number"])}
+                  >
+                    {dotsStyle === "numbers" ? slide.index + 1 : null}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+        {debugMode && (
+          <footer className="debug-mode">
+            <h2>Debug mode</h2>
+            <div className="inner">
+              <div className="debug-box">
+                <h3>State</h3>
+                <pre>
+                  {JSON.stringify(
+                    {
+                      isTouchInteracting,
+                      // translations,
+                      trackTranslateXValue,
+                      slidesTabIndex,
+                      currentNumberOfVisibleSlides,
+                      trackTransition,
+                      mediaQueryCssStyles,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+              <div className="debug-box">
+                <h3>Computed</h3>
+                <pre>
+                  {JSON.stringify(
+                    {
+                      transformValue,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+              <div className="debug-box">
+                <h3>Props</h3>
+                <pre>
+                  {JSON.stringify(
+                    {
+                      className,
+                      itemClassName,
+                      initialIndex,
+                      infinite, // TODO: infinite carousel
+                      loop,
+                      onChangeSlide,
+                      fallback,
+                      numVisibleSlides,
+                      locale,
+                      autoFocus,
+                      responsive,
+                      transitionDuration,
+                      debugMode,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+              <div className="debug-box">
+                <h3>Current slide</h3>
+                <pre>
+                  {JSON.stringify(
+                    {
+                      ...currentSlide,
+                      element: undefined,
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+            </div>
+          </footer>
+        )}
+      </div>
     </>
   );
 };

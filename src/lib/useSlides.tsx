@@ -85,6 +85,10 @@ export const useSlides = (
   const [hasReachedLastSlide, setHasReachedLastSlide] = useState(false);
 
   useEffect(() => {
+    if (!currentSlide?.index) {
+      return;
+    }
+
     if (!slides[currentSlide.index + 1]) {
       setHasReachedLastSlide(true);
     } else {

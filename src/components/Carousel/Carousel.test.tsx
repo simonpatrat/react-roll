@@ -14,8 +14,8 @@ const renderSlides = (nbSlides: number) => {
     });
 };
 
-const renderCarouselWithProps = (props) => (
-  <Carousel {...props}>{renderSlides(NB_SLIDES)}</Carousel>
+const renderCarouselWithProps = (props, nbSlides = NB_SLIDES) => (
+  <Carousel {...props}>{renderSlides(nbSlides)}</Carousel>
 );
 
 const baseProps = {
@@ -43,9 +43,7 @@ describe("Carousel", () => {
   });
 
   it("renders the Carousel component with the initial active slide at index 0", async () => {
-    const handleClickMock = jest.fn();
-
-    const { debug } = await render(renderCarouselWithProps(baseProps));
+    await render(renderCarouselWithProps(baseProps));
 
     const selectedSlide = screen.getByTestId("r-r__slide##0");
     const ariaHidden = selectedSlide.getAttribute("aria-hidden");
@@ -54,8 +52,6 @@ describe("Carousel", () => {
   });
 
   it("renders the Carousel component with the initial active slide at index 0", async () => {
-    const handleClickMock = jest.fn();
-
     await render(
       renderCarouselWithProps({
         ...baseProps,
@@ -73,7 +69,7 @@ describe("Carousel", () => {
   });
 
   it("Should set active slide when clicking on navigation button", async () => {
-    const { debug } = await render(
+    await render(
       renderCarouselWithProps({
         ...baseProps,
         initialIndex: 3,
@@ -139,7 +135,7 @@ describe("Carousel", () => {
   });
 
   it("should hide previous button if loop mode is disabled and carousel is at first slide", async () => {
-    const { debug } = await render(
+    await render(
       renderCarouselWithProps({
         ...baseProps,
         initialIndex: 0,
@@ -154,7 +150,7 @@ describe("Carousel", () => {
   });
 
   it("should hide next button if loop mode is disabled and last slide is reached", async () => {
-    const { debug } = await render(
+    await render(
       renderCarouselWithProps({
         ...baseProps,
         initialIndex: NB_SLIDES - 1,
@@ -169,7 +165,7 @@ describe("Carousel", () => {
   });
 
   it("should NOT hide previous button if loop mode is enabled and carousel is at first slide", async () => {
-    const { debug } = await render(
+    await render(
       renderCarouselWithProps({
         ...baseProps,
         initialIndex: 0,
@@ -204,11 +200,81 @@ describe("Carousel", () => {
     const { queryByRole } = await render(
       renderCarouselWithProps({
         ...baseProps,
-        initialIndex: NB_SLIDES - 1,
         dots: false,
       })
     );
 
     expect(queryByRole("tablist")).toBe(null);
+  });
+
+  it("should call the onChangeSlide callback function if given as a prop", async () => {
+    const handleChangeSlide = jest.fn();
+
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: 0,
+        onChangeSlide: handleChangeSlide,
+      })
+    );
+
+    const nextButton = screen.getByRole("button", {
+      name: "Go to next slide",
+    });
+    userEvent.click(nextButton);
+
+    expect(handleChangeSlide).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle different languages with default translations", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        locale: "fr",
+      })
+    );
+
+    const nextButton = screen.getByRole("button", {
+      name: "Aller au slide suivant",
+    });
+
+    expect(nextButton).toBeInTheDocument();
+  });
+
+  it("should render fallback component if given and no slides are given as children", async () => {
+    const fallbackText = "Hello Fallback";
+    await render(
+      renderCarouselWithProps(
+        {
+          ...baseProps,
+          locale: "fr",
+          fallback: <div>{fallbackText}</div>,
+        },
+        0 // render without slides
+      )
+    );
+
+    const carousel = screen.queryByRole("region", { name: "Carousel" });
+    const fallback = screen.getByText(fallbackText);
+    expect(carousel).toBe(null);
+    expect(fallback).toBeInTheDocument();
+  });
+
+  it("should render nothing component if no fallback was given and no slides are given as children", async () => {
+    const fallbackText = "Hello Fallback";
+    await render(
+      renderCarouselWithProps(
+        {
+          ...baseProps,
+          locale: "fr",
+        },
+        0 // render without slides
+      )
+    );
+
+    const carousel = screen.queryByRole("region", { name: "Carousel" });
+    const fallback = screen.queryByText(fallbackText);
+    expect(carousel).toBe(null);
+    expect(fallback).toBe(null);
   });
 });

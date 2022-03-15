@@ -25,7 +25,7 @@ export interface CarouselProps {
   locale?: string;
   autoFocus?: boolean;
   responsive?: CarouselResponsiveProp;
-  fallback?: React.ReactNode;
+  fallback?: React.ReactElement;
   transitionDuration?: number;
   debugMode?: boolean;
   slidePadding?: string;
