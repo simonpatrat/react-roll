@@ -6,7 +6,7 @@ export const es = {
         label: "Anterior",
       },
       next: {
-        arialLabel: "Ir a la siguiente diapositiva",
+        ariaLabel: "Ir a la siguiente diapositiva",
         label: "Próximo",
       },
     },

@@ -449,7 +449,8 @@ const Carousel = ({
           </div>
 
           {dots ? (
-            <div
+            <ul
+              role="tablist"
               className={cls([
                 "r-r__dots",
                 dotsPosition === "left" && "r-r__dots--left",
@@ -459,15 +460,18 @@ const Carousel = ({
             >
               {baseSlideList.map((slide: SlideItem, index) => {
                 return (
-                  <div
+                  <li
                     key={`r-r__dot##${slide.id}##${index.toString(36)}`}
                     className={cls([
                       "r-r__dot",
                       slide.index === currentSlide.index && "r-r__dot--active",
                     ])}
+                    role="presentation"
                   >
                     <button
                       type="button"
+                      role="button"
+                      tabIndex={0}
                       aria-label={`Go to slide ${slide.index + 1}`}
                       onClick={() => handleClickDot(slide.index)}
                       className={cls([
@@ -476,10 +480,10 @@ const Carousel = ({
                     >
                       {dotsStyle === "numbers" ? slide.index + 1 : null}
                     </button>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           ) : null}
           {debugMode && (
             <footer className="debug-mode">

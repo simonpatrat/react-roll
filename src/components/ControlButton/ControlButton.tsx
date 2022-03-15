@@ -19,6 +19,8 @@ const ControlButton = ({
   return (
     <button
       type="button"
+      role="button"
+      tabIndex={0}
       onClick={onClick}
       aria-label={ariaLabel || label}
       className={buttonClassNames}

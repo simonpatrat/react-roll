@@ -4,16 +4,18 @@ import userEvent from "@testing-library/user-event";
 
 import Carousel from "./Carousel";
 
+const NB_SLIDES = 7;
+
+const renderSlides = (nbSlides: number) => {
+  return Array(nbSlides)
+    .fill("slide-placeholder")
+    .map((_, index) => {
+      return <div>I am a slide {index}</div>;
+    });
+};
+
 const renderCarouselWithProps = (props) => (
-  <Carousel {...props}>
-    <div>Hello World Slide 1</div>
-    <div>Hello World SLide 2</div>
-    <div>I am a slide</div>
-    <div>I am a slide</div>
-    <div>I am a slide</div>
-    <div>I am a slide</div>
-    <div>I am a slide</div>
-  </Carousel>
+  <Carousel {...props}>{renderSlides(NB_SLIDES)}</Carousel>
 );
 
 const baseProps = {
@@ -54,7 +56,7 @@ describe("Carousel", () => {
   it("renders the Carousel component with the initial active slide at index 0", async () => {
     const handleClickMock = jest.fn();
 
-    const { debug } = await render(
+    await render(
       renderCarouselWithProps({
         ...baseProps,
         initialIndex: 3,
@@ -65,15 +67,12 @@ describe("Carousel", () => {
     const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
     const selectedSlide = screen.getByTestId("r-r__slide##3");
     const ariaHidden = selectedSlide.getAttribute("aria-hidden");
-    debug();
 
     expect(ariaHiddenFirstSlide).toBe("true");
     expect(ariaHidden).toBe("false");
   });
 
-  it("Should set active slide when clicking on naviagation button", async () => {
-    const handleClickMock = jest.fn();
-
+  it("Should set active slide when clicking on navigation button", async () => {
     const { debug } = await render(
       renderCarouselWithProps({
         ...baseProps,
@@ -94,5 +93,122 @@ describe("Carousel", () => {
 
     expect(ariaHiddenFirstSlide).toBe("true");
     expect(ariaHiddenSixthSlide).toBe("false");
+  });
+
+  it("should navigate to the next slide if it exist when clicking on the 'next' button", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: 0,
+      })
+    );
+
+    const nextButton = screen.getByRole("button", { name: "Go to next slide" });
+    userEvent.click(nextButton);
+
+    const firstSlide = screen.getByTestId("r-r__slide##0");
+    const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
+    const secondSlide = screen.getByTestId("r-r__slide##1");
+    const ariaHiddenSecondSlide = secondSlide.getAttribute("aria-hidden");
+
+    expect(ariaHiddenFirstSlide).toBe("true");
+    expect(ariaHiddenSecondSlide).toBe("false");
+  });
+
+  it("should navigate to the previous slide if it exist when clicking on the 'previous' button", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: 1,
+      })
+    );
+
+    const previousButton = screen.getByRole("button", {
+      name: "Go to previous slide",
+    });
+
+    userEvent.click(previousButton);
+
+    const firstSlide = screen.getByTestId("r-r__slide##0");
+    const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
+    const secondSlide = screen.getByTestId("r-r__slide##1");
+    const ariaHiddenSecondSlide = secondSlide.getAttribute("aria-hidden");
+
+    expect(ariaHiddenFirstSlide).toBe("false");
+    expect(ariaHiddenSecondSlide).toBe("true");
+  });
+
+  it("should hide previous button if loop mode is disabled and carousel is at first slide", async () => {
+    const { debug } = await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: 0,
+      })
+    );
+
+    const previousButton = screen.queryByRole("button", {
+      name: "Go to previous slide",
+    });
+
+    expect(previousButton).toBe(null);
+  });
+
+  it("should hide next button if loop mode is disabled and last slide is reached", async () => {
+    const { debug } = await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: NB_SLIDES - 1,
+      })
+    );
+
+    const nextButton = screen.queryByRole("button", {
+      name: "Go to next slide",
+    });
+
+    expect(nextButton).toBe(null);
+  });
+
+  it("should NOT hide previous button if loop mode is enabled and carousel is at first slide", async () => {
+    const { debug } = await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: 0,
+        loop: true,
+      })
+    );
+
+    const previousButton = screen.queryByRole("button", {
+      name: "Go to previous slide",
+    });
+
+    expect(previousButton).toBeInTheDocument();
+  });
+
+  it("should NOT hide next button if loop mode is enabled and last slide is reached", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: NB_SLIDES - 1,
+        loop: true,
+      })
+    );
+
+    const nextButton = screen.queryByRole("button", {
+      name: "Go to next slide",
+    });
+
+    expect(nextButton).toBeInTheDocument();
+  });
+
+  it('should hide carousel navigation "dots" buttons if prop "dots" is passed as "false"', async () => {
+    const { queryByRole } = await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        initialIndex: NB_SLIDES - 1,
+        dots: false,
+      })
+    );
+
+    expect(queryByRole("tablist")).toBe(null);
   });
 });

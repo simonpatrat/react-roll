@@ -6,7 +6,7 @@ export const en = {
         label: "Previous slide",
       },
       next: {
-        arialLabel: "Go to next slide",
+        ariaLabel: "Go to next slide",
         label: "Next slide",
       },
     },
