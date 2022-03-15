@@ -45,9 +45,6 @@ export default function MyCarousel() {
         1366: {
           numVisibleSlides: 3,
         },
-        9999: {
-          numVisibleSlides: 4,
-        },
       }}
       slidePadding="8px"
     >
