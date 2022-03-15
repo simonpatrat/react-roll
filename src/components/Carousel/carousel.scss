@@ -37,8 +37,6 @@
 .r-r__slide {
   transition: all 400ms ease;
   outline: none;
-  // TODO: Do not block user interaction when not transitioning
-  user-select: none !important;
 }
 
 .r-r__controls {

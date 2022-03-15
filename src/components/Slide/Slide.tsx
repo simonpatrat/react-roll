@@ -83,6 +83,8 @@ const Slide = memo(
       slideRef,
     ]);
 
+    const handleMouseDown = useCallback((event) => event.preventDefault(), []);
+
     return (
       <div
         ref={slideRef}
@@ -105,6 +107,7 @@ const Slide = memo(
           userSelect: pointerEvents,
         }}
         {...(onLoad && onLoad)}
+        onMouseDown={handleMouseDown}
       >
         {children}
       </div>
