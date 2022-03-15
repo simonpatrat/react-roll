@@ -10,7 +10,9 @@ const renderSlides = (nbSlides: number) => {
   return Array(nbSlides)
     .fill("slide-placeholder")
     .map((_, index) => {
-      return <div>I am a slide {index}</div>;
+      return (
+        <div key={`slide--${index.toString(36)}`}>I am a slide {index}</div>
+      );
     });
 };
 
