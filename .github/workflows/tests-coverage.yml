@@ -27,5 +27,5 @@ jobs:
           label: coverage
           message: ${{ env.COVERAGE }}
           namedLogo: jest
-          color: green
+          color: blue
           logoColor: lightblue
