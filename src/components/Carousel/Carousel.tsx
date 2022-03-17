@@ -10,6 +10,7 @@ import "./carousel.scss";
 import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
+import Debug from "../Debug";
 import ControlButton from "../ControlButton";
 import { cls } from "../../lib/utils";
 
@@ -354,8 +355,6 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
     slideWidthPercent,
   ]);
 
-  // console.log("SLides tab index", slidesTabIndex);
-
   const transformValue = `translateX(${trackTranslateXValue}%)`;
 
   return (
@@ -486,78 +485,28 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
           </ul>
         ) : null}
         {debugMode && (
-          <footer className="debug-mode">
-            <h2>Debug mode</h2>
-            <div className="inner">
-              <div className="debug-box">
-                <h3>State</h3>
-                <pre>
-                  {JSON.stringify(
-                    {
-                      isTouchInteracting,
-                      // translations,
-                      trackTranslateXValue,
-                      slidesTabIndex,
-                      currentNumberOfVisibleSlides,
-                      trackTransition,
-                      mediaQueryCssStyles,
-                    },
-                    null,
-                    2
-                  )}
-                </pre>
-              </div>
-              <div className="debug-box">
-                <h3>Computed</h3>
-                <pre>
-                  {JSON.stringify(
-                    {
-                      transformValue,
-                    },
-                    null,
-                    2
-                  )}
-                </pre>
-              </div>
-              <div className="debug-box">
-                <h3>Props</h3>
-                <pre>
-                  {JSON.stringify(
-                    {
-                      className,
-                      itemClassName,
-                      initialIndex,
-                      infinite, // TODO: infinite carousel
-                      loop,
-                      onChangeSlide,
-                      fallback,
-                      numVisibleSlides,
-                      locale,
-                      autoFocus,
-                      responsive,
-                      transitionDuration,
-                      debugMode,
-                    },
-                    null,
-                    2
-                  )}
-                </pre>
-              </div>
-              <div className="debug-box">
-                <h3>Current slide</h3>
-                <pre>
-                  {JSON.stringify(
-                    {
-                      ...currentSlide,
-                      element: undefined,
-                    },
-                    null,
-                    2
-                  )}
-                </pre>
-              </div>
-            </div>
-          </footer>
+          <Debug
+            isTouchInteracting={isTouchInteracting}
+            trackTranslateXValue={trackTranslateXValue}
+            slidesTabIndex={slidesTabIndex}
+            currentNumberOfVisibleSlides={currentNumberOfVisibleSlides}
+            trackTransition={trackTransition}
+            mediaQueryCssStyles={mediaQueryCssStyles}
+            transformValue={transformValue}
+            className={className}
+            itemClassName={itemClassName}
+            initialIndex={initialIndex}
+            infinite={infinite}
+            loop={loop}
+            onChangeSlide={onChangeSlide}
+            fallback={fallback}
+            numVisibleSlides={numVisibleSlides}
+            locale={locale}
+            autoFocus={autoFocus}
+            responsive={responsive}
+            transitionDuration={transitionDuration}
+            currentSlide={currentSlide}
+          />
         )}
       </div>
     </>

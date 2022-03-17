@@ -279,4 +279,14 @@ describe("Carousel", () => {
     expect(carousel).toBe(null);
     expect(fallback).toBe(null);
   });
+
+  it("should display debug mode panel if `debugMode is activated`", async () => {
+    const { getByTestId } = await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        debugMode: true,
+      })
+    );
+    expect(getByTestId("debug-mode-panel")).toBeInTheDocument();
+  });
 });
