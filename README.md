@@ -21,6 +21,26 @@ or
 yarn add @simonpatrat/react-roll
 ```
 
+### Basic usage
+
+```jsx
+import React from "react";
+import { Carousel } from "@simonpatrat/react-roll";
+
+export default function MyCarousel() {
+  return (
+    <Carousel>
+      {/* Each child is now a Slide */}
+      <div>Hello</div>
+      <div>World</div>
+      <div>I am a slide</div>
+    </Carousel>
+  );
+}
+```
+
+### Advanced usage
+
 ```jsx
 import React from "react";
 import { Carousel } from "@simonpatrat/react-roll";
@@ -59,6 +79,10 @@ export default function MyCarousel() {
 
 ### Todo
 
+- [ ] Better documentation on props ([see storybook docs](https://simonpatrat.github.io/react-roll/?path=/docs/carousel--advanced))
+- [ ] Async Slide Component
+- [ ] Full Screen mode
+- [ ] Improve Control buttons (positioning)
 - [x] Typescript
 - [x] scss support
 - [x] Storybook

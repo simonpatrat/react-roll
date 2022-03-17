@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Story, Meta } from "@storybook/react";
 
 import Carousel from "./Carousel";
@@ -81,6 +82,7 @@ const Card = () => {
 };
 
 const handleChangeSlide = (newSlide: SlideItem) => {
+  // eslint-disable-next-line no-console
   console.log("CHANGED SLIDE: ", newSlide);
 };
 
@@ -102,10 +104,10 @@ const Template2: Story<CarouselProps> = (args) => (
   </div>
 );
 
-export const FullyFeatured = Template1.bind({});
+export const advanced = Template1.bind({});
 export const Simple = Template2.bind({});
 
-FullyFeatured.args = {
+advanced.args = {
   className: "my-carousel",
   // initialIndex={2}
   onChangeSlide: handleChangeSlide,
@@ -128,31 +130,29 @@ FullyFeatured.args = {
     },
   },
   children: [
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
-    <Card />,
+    <Card key="1" />,
+    <Card key="2" />,
+    <Card key="3" />,
+    <Card key="4" />,
+    <Card key="5" />,
+    <Card key="6" />,
+    <Card key="7" />,
+    <Card key="8" />,
+    <Card key="9" />,
+    <Card key="10" />,
   ],
 };
 
 Simple.args = {
   className: "my-carousel-2",
-  onChangeSlide: handleChangeSlide,
-  numVisibleSlides: 1,
   children: [
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
-    <ImageBox></ImageBox>,
+    <ImageBox key="1" />,
+    <ImageBox key="2" />,
+    <ImageBox key="3" />,
+    <ImageBox key="4" />,
+    <ImageBox key="5" />,
+    <ImageBox key="6" />,
+    <ImageBox key="7" />,
+    <ImageBox key="8" />,
   ],
 };
