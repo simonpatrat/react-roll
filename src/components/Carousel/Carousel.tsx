@@ -11,7 +11,7 @@ import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
 import Debug from "../Debug";
-import Controls from "../Controls/Controls";
+import Controls from "../Controls";
 import { cls } from "../../lib/utils";
 
 import {
