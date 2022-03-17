@@ -11,7 +11,7 @@ import { SlideItem, useSlides } from "../../lib/useSlides";
 import usePrevious from "../../lib/usePrevious";
 import Slide from "../Slide";
 import Debug from "../Debug";
-import ControlButton from "../ControlButton";
+import Controls from "../Controls/Controls";
 import { cls } from "../../lib/utils";
 
 import {
@@ -19,10 +19,7 @@ import {
   CAROUSEL_TRACK_CLASSNAME,
   CAROUSEL_CLASSNAME_DEBUG_MODE,
 } from "../../lib/constants";
-import {
-  defaultTranslationsMessages,
-  getTranslation,
-} from "../../lib/translations";
+import { defaultTranslationsMessages } from "../../lib/translations";
 
 import {
   CarouselProps,
@@ -208,10 +205,13 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
     };
   }, [enhancedMediaQueryList, handleMediaQueryChange]);
 
-  const mergedTranslations = {
-    ...defaultTranslationsMessages,
-    ...translations,
-  };
+  const mergedTranslations = useMemo(
+    () => ({
+      ...defaultTranslationsMessages,
+      ...translations,
+    }),
+    [translations]
+  );
 
   useEffect(() => {
     if (didMount.current) {
@@ -316,14 +316,6 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
     carouselRef,
   ]);
 
-  const handleClickNext = useCallback(() => {
-    goToNext();
-  }, [goToNext]);
-
-  const handleClickPrevious = useCallback(() => {
-    goToPrevious();
-  }, [goToPrevious]);
-
   const handleClickDot = useCallback(
     (slideIndex) => {
       goTo(slideIndex);
@@ -411,42 +403,16 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
               })}
             </div>
           </div>
-          <div className="r-r__controls">
-            {currentSlide?.index > 0 || loop ? (
-              <ControlButton
-                buttonType={controlButtonType}
-                direction="previous"
-                onClick={handleClickPrevious}
-                label={getTranslation(
-                  locale,
-                  "controls.buttons.previous.label",
-                  mergedTranslations
-                )}
-                ariaLabel={getTranslation(
-                  locale,
-                  "controls.buttons.previous.ariaLabel",
-                  mergedTranslations
-                )}
-              />
-            ) : null}
-            {loop || !hasReachedLastSlide ? (
-              <ControlButton
-                buttonType={controlButtonType}
-                direction="next"
-                onClick={handleClickNext}
-                label={getTranslation(
-                  locale,
-                  "controls.buttons.next.label",
-                  mergedTranslations
-                )}
-                ariaLabel={getTranslation(
-                  locale,
-                  "controls.buttons.next.ariaLabel",
-                  mergedTranslations
-                )}
-              />
-            ) : null}
-          </div>
+          <Controls
+            currentSlide={currentSlide}
+            controlButtonType={controlButtonType}
+            goToPrevious={goToPrevious}
+            goToNext={goToNext}
+            locale={locale}
+            mergedTranslations={mergedTranslations}
+            loop={loop}
+            hasReachedLastSlide={hasReachedLastSlide}
+          />
         </div>
 
         {dots ? (

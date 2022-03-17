@@ -32,6 +32,7 @@
   display: flex;
   flex-wrap: nowrap;
   cursor: ew-resize;
+  user-select: none;
 }
 
 .r-r__slide {
