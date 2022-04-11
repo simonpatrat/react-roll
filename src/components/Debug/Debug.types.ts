@@ -13,4 +13,5 @@ export interface DebugProps extends CarouselProps {
   transformValue: string;
   currentSlide: SlideItem;
   trackTransition?: string;
+  direction?: "left" | "right";
 }

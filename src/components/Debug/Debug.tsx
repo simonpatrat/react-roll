@@ -22,6 +22,7 @@ const Debug = ({
   responsive,
   transitionDuration,
   currentSlide,
+  direction,
 }: DebugProps) => {
   return (
     <footer className="debug-mode" data-testid="debug-mode-panel">
@@ -39,6 +40,7 @@ const Debug = ({
                 currentNumberOfVisibleSlides,
                 trackTransition,
                 mediaQueryCssStyles,
+                direction,
               },
               null,
               2

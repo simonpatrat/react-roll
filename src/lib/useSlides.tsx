@@ -83,6 +83,7 @@ export const useSlides = (
   const [lastSlideIndex, setLastSlideIndex] = useState(currentIndex);
 
   const [hasReachedLastSlide, setHasReachedLastSlide] = useState(false);
+  const [direction, setDirection] = useState<"left" | "right">("right");
 
   useEffect(() => {
     if (!currentSlide?.index) {
@@ -99,6 +100,11 @@ export const useSlides = (
   const goTo = (itemIndex: number): void => {
     setLastSlideIndex(currentSlide.index);
     setCurrentSlide(slides[itemIndex]);
+    if (itemIndex > currentSlide.index) {
+      setDirection("right");
+    } else {
+      setDirection("left");
+    }
   };
   const goToNext = (): void => {
     const lastIndex = slides[slides.length - 1].index;
@@ -130,5 +136,6 @@ export const useSlides = (
     goToPrevious,
     lastSlideIndex,
     hasReachedLastSlide,
+    direction,
   };
 };

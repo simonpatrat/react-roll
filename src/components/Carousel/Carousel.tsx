@@ -66,6 +66,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
     goToNext,
     lastSlideIndex,
     hasReachedLastSlide,
+    direction,
   } = useSlides(children, initialIndex, loop, infinite);
 
   const [trackTranslateXValue, setTrackTranslateXValue] = useState(0);
@@ -316,6 +317,11 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
     carouselRef,
   ]);
 
+  const handleTransitionEnd = useCallback(() => {
+    // [...nums, ...nums.slice(0, 1)].slice(-7)
+    console.log("TransitionEnd");
+  }, []);
+
   const handleClickDot = useCallback(
     (slideIndex) => {
       goTo(slideIndex);
@@ -379,6 +385,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
               onTouchCancel={onDragStop}
               onMouseUp={onDragStop}
               onMouseLeave={onDragStop}
+              onTransitionEnd={handleTransitionEnd}
             >
               {slides.map((slide: SlideItem, index) => {
                 const isSlideActive = slide.id === currentSlide?.id;
@@ -472,6 +479,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
             responsive={responsive}
             transitionDuration={transitionDuration}
             currentSlide={currentSlide}
+            direction={direction}
           />
         )}
       </div>
