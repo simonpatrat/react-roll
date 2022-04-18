@@ -9,7 +9,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
   className,
   itemClassName,
   initialIndex,
-  infinite = false, // TODO: infinite carousel
+  infinite = false,
   loop = false,
   onChangeSlide,
   numVisibleSlides = 1,

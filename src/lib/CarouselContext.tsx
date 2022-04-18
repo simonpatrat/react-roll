@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useMemo } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 
 import { CAROUSEL_SLIDE_CLASSNAME } from "./constants";
 import { SlideItem } from "..";
@@ -95,6 +101,7 @@ export interface CarouselContextValue extends Record<string, unknown> {
   lastSlideIndex: number;
   hasReachedLastSlide: boolean;
   direction: "left" | "right";
+  initialRenderDone?: boolean;
 }
 
 export const CarouselContext = createContext<CarouselContextValue>(
@@ -129,6 +136,7 @@ const CarouselProvider = ({
   const [lastSlideIndex, setLastSlideIndex] = useState(currentIndex);
   const [hasReachedLastSlide, setHasReachedLastSlide] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
+  const initialrenderDone = useRef<boolean>(false);
 
   useEffect(() => {
     setSlides(
@@ -190,8 +198,13 @@ const CarouselProvider = ({
   };
 
   useEffect(() => {
-    goTo(slides.findIndex((slide) => slide.indexId === currentIndex));
-  }, [currentIndex, slides]);
+    if (slides.length > 0) {
+      if (initialrenderDone.current === false) {
+        goTo(slides.findIndex((slide) => slide.indexId === currentIndex));
+        initialrenderDone.current = true;
+      }
+    }
+  }, [currentIndex, slides, initialrenderDone]);
 
   const value = {
     slides,
@@ -204,6 +217,7 @@ const CarouselProvider = ({
     lastSlideIndex,
     hasReachedLastSlide,
     direction,
+    initialrenderDone: initialrenderDone.current,
   };
   return (
     <CarouselContext.Provider value={value}>

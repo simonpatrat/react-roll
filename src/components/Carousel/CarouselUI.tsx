@@ -34,7 +34,7 @@ const CarouselUI = ({
   className,
   itemClassName,
   initialIndex,
-  infinite = false, // TODO: infinite carousel
+  infinite = false,
   loop = false,
   onChangeSlide,
   numVisibleSlides = 1,
@@ -60,6 +60,7 @@ const CarouselUI = ({
     lastSlideIndex,
     hasReachedLastSlide,
     direction,
+    initialRenderDone,
   } = useContext(CarouselContext);
 
   const didMount = useRef(false);
@@ -202,7 +203,7 @@ const CarouselUI = ({
   );
 
   useEffect(() => {
-    if (didMount.current) {
+    if (didMount.current || initialRenderDone) {
       if (
         currentSlide &&
         onChangeSlide &&
@@ -213,7 +214,7 @@ const CarouselUI = ({
     } else {
       didMount.current = true;
     }
-  }, [currentSlide, onChangeSlide]);
+  }, [currentSlide, onChangeSlide, initialRenderDone]);
 
   const disableTransition = useCallback(() => {
     setTrackTransition("none");
