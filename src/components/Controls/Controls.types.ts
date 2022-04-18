@@ -1,4 +1,4 @@
-import { SlideItem } from "../../lib";
+import { SlideItem } from "../../common/types";
 import { CarouselProps } from "../Carousel/Carousel.types";
 
 export interface ControlsProps {
@@ -10,4 +10,5 @@ export interface ControlsProps {
   loop: CarouselProps["loop"];
   hasReachedLastSlide: boolean;
   locale: string;
+  infinite?: boolean;
 }

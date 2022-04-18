@@ -4,14 +4,13 @@ import { Story, Meta } from "@storybook/react";
 
 import Carousel from "./Carousel";
 import { CarouselProps } from "./Carousel.types";
-import { SlideItem } from "../../lib/useSlides";
+import { SlideItem } from "../../common/types";
 
 const locale = "en";
 
-const ImageBox = () => {
-  const imgUrl = `https://picsum.photos/1024/576?random=${
-    Math.floor(Math.random() * 100) + 1
-  }`;
+// eslint-disable-next-line react/prop-types
+const ImageBox = ({ index }) => {
+  const imgUrl = `https://picsum.photos/id/${index + 110}/1024/576`;
 
   return (
     <div>
@@ -27,10 +26,9 @@ const ImageBox = () => {
   );
 };
 
-const Card = () => {
-  const imgUrl = `https://picsum.photos/768/432?random=${
-    Math.floor(Math.random() * 100) + 1
-  }`;
+// eslint-disable-next-line react/prop-types
+const Card = ({ index }) => {
+  const imgUrl = `https://picsum.photos/id/${index + 110}/768/432`;
 
   return (
     <div
@@ -130,29 +128,30 @@ advanced.args = {
     },
   },
   children: [
-    <Card key="1" />,
-    <Card key="2" />,
-    <Card key="3" />,
-    <Card key="4" />,
-    <Card key="5" />,
-    <Card key="6" />,
-    <Card key="7" />,
-    <Card key="8" />,
-    <Card key="9" />,
-    <Card key="10" />,
+    <Card key="1" index={1} />,
+    <Card key="2" index={2} />,
+    <Card key="3" index={3} />,
+    <Card key="4" index={4} />,
+    <Card key="5" index={5} />,
+    <Card key="6" index={6} />,
+    <Card key="7" index={7} />,
+    <Card key="8" index={8} />,
+    <Card key="9" index={9} />,
+    <Card key="10" index={10} />,
   ],
 };
 
 Simple.args = {
   className: "my-carousel-2",
+  initialIndex: 0,
   children: [
-    <ImageBox key="1" />,
-    <ImageBox key="2" />,
-    <ImageBox key="3" />,
-    <ImageBox key="4" />,
-    <ImageBox key="5" />,
-    <ImageBox key="6" />,
-    <ImageBox key="7" />,
-    <ImageBox key="8" />,
+    <ImageBox key="1" index={1} />,
+    <ImageBox key="2" index={2} />,
+    <ImageBox key="3" index={3} />,
+    <ImageBox key="4" index={4} />,
+    <ImageBox key="5" index={5} />,
+    <ImageBox key="6" index={6} />,
+    <ImageBox key="7" index={7} />,
+    <ImageBox key="8" index={8} />,
   ],
 };
