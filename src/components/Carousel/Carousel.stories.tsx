@@ -57,22 +57,30 @@ const Template2: ComponentStory<typeof Carousel> = (args) => (
   </div>
 );
 
-export const Simple = Template2.bind({});
+export const Basic = Template2.bind({});
 
-Simple.args = {
+Basic.args = {
   ...defaultStoryProps,
   className: "my-carousel-2",
   initialIndex: 0,
 };
 
-export const Infinite = Template2.bind({});
-Infinite.args = {
+export const BasicInfinite = Template2.bind({});
+BasicInfinite.args = {
   ...defaultStoryProps,
   infinite: true,
 };
 
-export const Advanced = Template1.bind({});
-Advanced.args = {
+export const MultipleSlidesInfinite = Template2.bind({});
+MultipleSlidesInfinite.args = {
+  ...defaultStoryProps,
+  numVisibleSlides: 3,
+  slidePadding: `0.2%`,
+  infinite: true,
+};
+
+export const MultipleSlidesWithResponsiveOptions = Template1.bind({});
+MultipleSlidesWithResponsiveOptions.args = {
   ...defaultStoryProps,
   className: "my-carousel",
   // initialIndex={2}
@@ -82,6 +90,7 @@ Advanced.args = {
   locale,
   autoFocus: true,
   slidePadding: `8px`,
+  dotsStyle: "numbers",
   responsive: {
     1366: {
       numVisibleSlides: 3,

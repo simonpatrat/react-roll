@@ -6,10 +6,4 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  options: {
-    storySort: {
-      method: "alphabetical",
-      order: ["Carousel", ["Simple", "Infinite", "Advanced"]],
-    },
-  },
 };
