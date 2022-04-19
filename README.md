@@ -79,7 +79,7 @@ export default function MyCarousel() {
 
 ### Todo
 
-- [ ] Better documentation on props ([see storybook docs](https://simonpatrat.github.io/react-roll/?path=/docs/carousel--advanced))
+- [ ] Better documentation on props ([see storybook docs](https://simonpatrat.github.io/react-roll/?path=/docs))
 - [ ] Async Slide Component
 - [ ] Full Screen mode
 - [ ] Improve Control buttons (positioning)
