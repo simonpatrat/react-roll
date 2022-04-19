@@ -1,1 +1,1 @@
-export * from "./useSlides";
+export * from "./CarouselContext";

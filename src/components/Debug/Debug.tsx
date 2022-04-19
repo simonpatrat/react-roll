@@ -67,7 +67,7 @@ const Debug = ({
                 className,
                 itemClassName,
                 initialIndex,
-                infinite, // TODO: infinite carousel
+                infinite,
                 loop,
                 onChangeSlide,
                 fallback,

@@ -13,6 +13,7 @@ const Controls = ({
   mergedTranslations,
   loop,
   hasReachedLastSlide,
+  infinite,
 }: ControlsProps) => {
   const handleClickNext = useCallback(() => {
     goToNext();
@@ -23,7 +24,7 @@ const Controls = ({
   }, [goToPrevious]);
   return (
     <div className="r-r__controls">
-      {currentSlide?.index > 0 || loop ? (
+      {currentSlide?.index > 0 || loop || infinite ? (
         <ControlButton
           buttonType={controlButtonType}
           direction="previous"
@@ -40,7 +41,7 @@ const Controls = ({
           )}
         />
       ) : null}
-      {loop || !hasReachedLastSlide ? (
+      {loop || infinite || !hasReachedLastSlide ? (
         <ControlButton
           buttonType={controlButtonType}
           direction="next"

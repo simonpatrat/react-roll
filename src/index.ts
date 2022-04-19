@@ -1,5 +1,5 @@
 import Carousel from "./components/Carousel/Carousel";
 
 export { Carousel };
-export { SlideItem } from "./lib";
+export { SlideItem } from "./common/types";
 export * from "./lib/translations";

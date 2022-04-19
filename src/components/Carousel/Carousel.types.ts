@@ -1,5 +1,5 @@
 import React from "react";
-import { SlideItem } from "../../lib/useSlides";
+import { SlideItem } from "../../common/types";
 import { Translations } from "../../lib/translations/translations.types";
 
 export interface CarouselResponsivePropRules {

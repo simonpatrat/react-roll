@@ -1,5 +1,5 @@
 import React from "react";
-import { SlideItem } from "../../lib/useSlides";
+import { SlideItem } from "../../common/types";
 
 export interface LoadedSlideItem extends Partial<SlideItem> {
   isActive: boolean;
