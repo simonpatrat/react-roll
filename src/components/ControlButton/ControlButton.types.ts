@@ -4,4 +4,5 @@ export interface ControlButtonProps {
   onClick: () => void;
   ariaLabel?: string;
   buttonType?: "text" | "icon";
+  disabled?: boolean;
 }

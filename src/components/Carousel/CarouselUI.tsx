@@ -78,6 +78,8 @@ const CarouselUI = ({
     Partial<CarouselResponsivePropRules>
   >({});
 
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+
   const [currentNumberOfVisibleSlides, setCurrentNumberOfVisibleSlides] =
     useState<number>(numVisibleSlides);
 
@@ -91,6 +93,7 @@ const CarouselUI = ({
       ? Math.abs(currentSlide.index - lastSlideIndex)
       : 0;
   const previousIsTouchInteracting = usePrevious(isTouchInteracting);
+  const previousSlideIndex = usePrevious(currentSlide.index);
 
   const getTrackTransitionSpeedMs = useCallback(() => {
     if (distanceBetweenNextSlideAndCurrent === 0) {
@@ -103,7 +106,7 @@ const CarouselUI = ({
   }, [distanceBetweenNextSlideAndCurrent, transitionDuration]);
 
   const [trackTransition, setTrackTransition] = useState<string | undefined>(
-    `transform ${getTrackTransitionSpeedMs()}ms ease-out`
+    "none"
   );
 
   const enhancedMediaQueryList = useMemo(() => {
@@ -167,6 +170,12 @@ const CarouselUI = ({
   }, [numVisibleSlides]);
 
   useEffect(() => {
+    if (currentSlide.index !== previousSlideIndex) {
+      setIsTransitioning(false);
+    }
+  }, [currentSlide, previousSlideIndex]);
+
+  useEffect(() => {
     if (enhancedMediaQueryList) {
       enhancedMediaQueryList.forEach((el) => {
         const { mq, rules } = el;
@@ -213,6 +222,12 @@ const CarouselUI = ({
       }
     } else {
       didMount.current = true;
+      setTimeout(() => {
+        setTrackTransition(
+          `transform ${getTrackTransitionSpeedMs()}ms ease-out`
+        );
+        setIsTransitioning(false);
+      }, transitionDuration);
     }
   }, [currentSlide, onChangeSlide, initialRenderDone]);
 
@@ -312,6 +327,8 @@ const CarouselUI = ({
         return;
       }
 
+      setIsTransitioning(false);
+
       if (currentSlide?.isClone === true) {
         disableTransition();
 
@@ -321,14 +338,24 @@ const CarouselUI = ({
 
         goTo(realSlideIndexToGo);
 
-        setTimeout(() => {
-          setTrackTransition(
-            `transform ${getTrackTransitionSpeedMs()}ms ease-out`
-          );
-        }, 100);
+        setTimeout(
+          () => {
+            setTrackTransition(
+              `transform ${getTrackTransitionSpeedMs()}ms ease-out`
+            );
+            setIsTransitioning(false);
+          },
+          transitionDuration / 4 > 0 ? transitionDuration / 4 : 20
+        );
       }
     },
-    [currentSlide]
+    [
+      currentSlide?.indexId,
+      setIsTransitioning,
+      getTrackTransitionSpeedMs,
+      goTo,
+      slides,
+    ]
   );
 
   const handleClickDot = useCallback(
@@ -350,6 +377,12 @@ const CarouselUI = ({
     // return slideIndex;
     return slides.findIndex((slide) => slide.index === slideIndex);
   };
+
+  useEffect(() => {
+    if (transitionDuration > 0) {
+      setIsTransitioning(true);
+    }
+  }, [currentSlide.index]);
 
   useEffect(() => {
     const newTranslateValue = findSlideTranslateValue(currentSlide.index);
@@ -421,13 +454,6 @@ const CarouselUI = ({
                   pointerEvents={slidesTabIndex === 0 ? undefined : "none"}
                 >
                   <>{slide.element}</>
-                  {/* <p>{slide.index}</p> */}
-                  {/* <p>
-                    {JSON.stringify({
-                      ...slide,
-                      element: undefined,
-                    })}
-                  </p> */}
                 </Slide>
               );
             })}
@@ -443,6 +469,7 @@ const CarouselUI = ({
           loop={loop}
           infinite={infinite}
           hasReachedLastSlide={hasReachedLastSlide}
+          disabled={isTransitioning}
         />
       </div>
 

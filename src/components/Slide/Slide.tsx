@@ -10,109 +10,95 @@ import {
 import { SlideProps } from "./Slide.types";
 
 // eslint-disable-next-line react/display-name
-const Slide = memo(
-  ({
-    id,
-    className,
-    isActive,
-    index,
-    children,
-    onLoad,
-    width,
-    autoFocus,
-    carouselTrackRef,
-    // eslint-disable-next-line no-unused-vars
-    debugMode = false,
-    slidePadding = "0",
-    tabIndex = 0,
-    pointerEvents,
-  }: SlideProps) => {
-    const slideRef = useRef<HTMLDivElement>(null);
-    const previousIsActive = usePrevious(isActive);
+const Slide = memo(function Slide({
+  id,
+  className,
+  isActive,
+  index,
+  children,
+  onLoad,
+  width,
+  autoFocus,
+  carouselTrackRef,
+  // eslint-disable-next-line no-unused-vars
+  debugMode = false,
+  slidePadding = "0",
+  tabIndex = 0,
+  pointerEvents,
+}: SlideProps) {
+  const slideRef = useRef<HTMLDivElement>(null);
+  const previousIsActive = usePrevious(isActive);
 
-    useEffect(() => {
-      if (slideRef?.current && onLoad) {
-        onLoad(slideRef.current, {
-          id,
-          isActive,
-          index,
-          width,
-        });
+  useEffect(() => {
+    if (slideRef?.current && onLoad) {
+      onLoad(slideRef.current, {
+        id,
+        isActive,
+        index,
+        width,
+      });
+    }
+  }, [slideRef, onLoad, id, isActive, index, width]);
+
+  const applyAutoFocus = useCallback(
+    (event) => {
+      const { srcElement, propertyName } = event;
+      // Here to prevent autofocus bugs when something transitions inside of carousel track
+      // we are tracking only "transform" property transition and only for carousel track element
+      const isCarouselTrackTransitionend =
+        srcElement === carouselTrackRef.current && propertyName === "transform";
+      if (slideRef.current && isCarouselTrackTransitionend && tabIndex === 0) {
+        slideRef.current.focus();
       }
-    }, [slideRef, onLoad, id, isActive, index, width]);
+    },
+    [slideRef, carouselTrackRef, tabIndex]
+  );
 
-    const applyAutoFocus = useCallback(
-      (event) => {
-        const { srcElement, propertyName } = event;
-        // Here to prevent autofocus bugs when something transitions inside of carousel track
-        // we are tracking only "transform" property transition and only for carousel track element
-        const isCarouselTrackTransitionend =
-          srcElement === carouselTrackRef.current &&
-          propertyName === "transform";
-        if (
-          slideRef.current &&
-          isCarouselTrackTransitionend &&
-          tabIndex === 0
-        ) {
-          slideRef.current.focus();
-        }
-      },
-      [slideRef, carouselTrackRef, tabIndex]
-    );
+  useEffect(() => {
+    const currentCarousel = carouselTrackRef?.current;
+    if (
+      currentCarousel &&
+      autoFocus &&
+      slideRef.current &&
+      !previousIsActive &&
+      isActive
+    ) {
+      currentCarousel.addEventListener("transitionend", applyAutoFocus);
+    }
+    return () => {
+      currentCarousel?.removeEventListener("transitionend", applyAutoFocus);
+    };
+  }, [autoFocus, carouselTrackRef, applyAutoFocus, previousIsActive, isActive, slideRef]);
 
-    useEffect(() => {
-      const currentCarousel = carouselTrackRef?.current;
-      if (
-        currentCarousel &&
-        autoFocus &&
-        slideRef.current &&
-        !previousIsActive &&
-        isActive
-      ) {
-        currentCarousel.addEventListener("transitionend", applyAutoFocus);
-      }
-      return () => {
-        currentCarousel?.removeEventListener("transitionend", applyAutoFocus);
-      };
-    }, [
-      autoFocus,
-      carouselTrackRef,
-      applyAutoFocus,
-      previousIsActive,
-      isActive,
-      slideRef,
-    ]);
+  const handleMouseDown = useCallback((event) => event.preventDefault(), []);
 
-    const handleMouseDown = useCallback((event) => event.preventDefault(), []);
-
-    return (
-      <div
-        ref={slideRef}
-        data-id={id}
-        data-testid={id}
-        data-index={index}
-        role="group"
-        aria-label={`slide ${index + 1}`}
-        tabIndex={tabIndex}
-        aria-hidden={!isActive}
-        className={cls([
-          CAROUSEL_SLIDE_CLASSNAME,
-          !!className && className,
-          isActive ? CAROUSEL_ACTIVE_SLIDE_CLASSNAME : false,
-        ])}
-        style={{
-          width: `${width}%`,
-          padding: slidePadding,
-          pointerEvents,
-          userSelect: pointerEvents,
-        }}
-        {...(onLoad && onLoad)}
-        onMouseDown={handleMouseDown}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+  return (
+    <div
+      ref={slideRef}
+      data-id={id}
+      data-testid={id}
+      data-index={index}
+      role="group"
+      aria-label={`slide ${index + 1}`}
+      tabIndex={tabIndex}
+      aria-hidden={!isActive}
+      className={cls([
+        CAROUSEL_SLIDE_CLASSNAME,
+        !!className && className,
+        isActive ? CAROUSEL_ACTIVE_SLIDE_CLASSNAME : false,
+      ])}
+      style={{
+        width: `${width}%`,
+        padding: slidePadding,
+        pointerEvents,
+        userSelect: pointerEvents,
+      }}
+      {...(onLoad && onLoad)}
+      onMouseDown={handleMouseDown}
+    >
+      {children}
+    </div>
+  );
+});
 
 export default Slide;

@@ -11,4 +11,5 @@ export interface ControlsProps {
   hasReachedLastSlide: boolean;
   locale: string;
   infinite?: boolean;
+  disabled?: boolean;
 }

@@ -14,6 +14,7 @@ const Controls = ({
   loop,
   hasReachedLastSlide,
   infinite,
+  disabled = false,
 }: ControlsProps) => {
   const handleClickNext = useCallback(() => {
     goToNext();
@@ -28,7 +29,7 @@ const Controls = ({
         <ControlButton
           buttonType={controlButtonType}
           direction="previous"
-          onClick={handleClickPrevious}
+          onClick={disabled ? () => {} : handleClickPrevious}
           label={getTranslation(
             locale,
             "controls.buttons.previous.label",
@@ -45,7 +46,7 @@ const Controls = ({
         <ControlButton
           buttonType={controlButtonType}
           direction="next"
-          onClick={handleClickNext}
+          onClick={disabled ? () => {} : handleClickNext}
           label={getTranslation(
             locale,
             "controls.buttons.next.label",
@@ -56,6 +57,7 @@ const Controls = ({
             "controls.buttons.next.ariaLabel",
             mergedTranslations
           )}
+          disabled={disabled}
         />
       ) : null}
     </div>

@@ -9,6 +9,7 @@ const ControlButton = ({
   ariaLabel,
   onClick,
   buttonType = "icon",
+  disabled = false,
 }: ControlButtonProps) => {
   const buttonClassNames = cls([
     "r-r__button",
@@ -24,6 +25,7 @@ const ControlButton = ({
       onClick={onClick}
       aria-label={ariaLabel || label}
       className={buttonClassNames}
+      disabled={disabled}
     >
       {buttonType === "icon" ? <IconChevron /> : label}
     </button>

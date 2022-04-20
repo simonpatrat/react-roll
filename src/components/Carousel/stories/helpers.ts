@@ -6,7 +6,7 @@ export const defaultStoryProps = {
   onChangeSlide: (...args: any) => console.log("Slide Changed", { ...args }),
   numVisibleSlides: 1,
   locale: "en",
-  autoFocus: true,
+  autoFocus: false,
   transitionDuration: 300,
   debugMode: false,
   dots: true,
