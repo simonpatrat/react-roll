@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useCallback,
 } from "react";
 
 import { CAROUSEL_SLIDE_CLASSNAME } from "./constants";
@@ -12,11 +13,10 @@ import { SlideItem } from "..";
 const createSlide = (
   item: React.ReactNode,
   index: number,
-  isCurrent: boolean,
-  id?: string
+  isCurrent: boolean
 ): SlideItem | null => {
   return {
-    id: `${CAROUSEL_SLIDE_CLASSNAME}##${id || index.toString(36)}`,
+    id: `${CAROUSEL_SLIDE_CLASSNAME}##${index || index.toString(36)}`,
     element: item || null,
     initial: isCurrent,
     index,
@@ -161,19 +161,22 @@ const CarouselProvider = ({
     }
   }, [currentSlide?.index, setHasReachedLastSlide]);
 
-  const goTo = (itemIndex: number): void => {
-    setLastSlideIndex(currentSlide.index);
+  const goTo = useCallback(
+    (itemIndex: number): void => {
+      setLastSlideIndex(currentSlide.index);
 
-    setCurrentSlide(slides[itemIndex]);
+      setCurrentSlide(slides[itemIndex]);
 
-    if (itemIndex > currentSlide.index) {
-      setDirection("right");
-    } else {
-      setDirection("left");
-    }
-  };
+      if (itemIndex > currentSlide.index) {
+        setDirection("right");
+      } else {
+        setDirection("left");
+      }
+    },
+    [setCurrentSlide, setDirection, setLastSlideIndex, currentSlide, slides]
+  );
 
-  const goToNext = (): void => {
+  const goToNext = useCallback((): void => {
     const endIndex = slides[slides.length - 1].index;
 
     const nextIndex = currentSlide.index + 1;
@@ -183,9 +186,9 @@ const CarouselProvider = ({
     } else if (loop || infinite) {
       goTo(0);
     }
-  };
+  }, [goTo, slides, currentSlide]);
 
-  const goToPrevious = (): void => {
+  const goToPrevious = useCallback((): void => {
     const endIndex = slides[slides.length - 1].index;
 
     const previousIndex = currentSlide.index - 1;
@@ -195,7 +198,7 @@ const CarouselProvider = ({
     } else if (loop || infinite) {
       goTo(endIndex);
     }
-  };
+  }, [goTo, slides, currentSlide]);
 
   useEffect(() => {
     if (slides.length > 0) {

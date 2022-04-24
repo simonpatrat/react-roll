@@ -60,7 +60,6 @@ const CarouselUI = ({
     lastSlideIndex,
     hasReachedLastSlide,
     direction,
-    initialRenderDone,
   } = useContext(CarouselContext);
 
   const didMount = useRef(false);
@@ -93,7 +92,6 @@ const CarouselUI = ({
       ? Math.abs(currentSlide.index - lastSlideIndex)
       : 0;
   const previousIsTouchInteracting = usePrevious(isTouchInteracting);
-  const previousSlideIndex = usePrevious(currentSlide.index);
 
   const getTrackTransitionSpeedMs = useCallback(() => {
     if (distanceBetweenNextSlideAndCurrent === 0) {
@@ -170,12 +168,6 @@ const CarouselUI = ({
   }, [numVisibleSlides]);
 
   useEffect(() => {
-    if (currentSlide.index !== previousSlideIndex) {
-      setIsTransitioning(false);
-    }
-  }, [currentSlide, previousSlideIndex]);
-
-  useEffect(() => {
     if (enhancedMediaQueryList) {
       enhancedMediaQueryList.forEach((el) => {
         const { mq, rules } = el;
@@ -212,7 +204,7 @@ const CarouselUI = ({
   );
 
   useEffect(() => {
-    if (didMount.current || initialRenderDone) {
+    if (didMount.current) {
       if (
         currentSlide &&
         onChangeSlide &&
@@ -229,7 +221,7 @@ const CarouselUI = ({
         setIsTransitioning(false);
       }, transitionDuration);
     }
-  }, [currentSlide, onChangeSlide, initialRenderDone]);
+  }, [currentSlide, onChangeSlide]);
 
   const disableTransition = useCallback(() => {
     setTrackTransition("none");
@@ -322,12 +314,9 @@ const CarouselUI = ({
 
   const handleTransitionEnd = useCallback(
     (event) => {
-      // [...nums, ...nums.slice(0, 1)].slice(-7)
       if (event?.propertyName !== "transform") {
         return;
       }
-
-      setIsTransitioning(false);
 
       if (currentSlide?.isClone === true) {
         disableTransition();
@@ -347,6 +336,8 @@ const CarouselUI = ({
           },
           transitionDuration / 4 > 0 ? transitionDuration / 4 : 20
         );
+      } else {
+        setIsTransitioning(false);
       }
     },
     [
@@ -379,7 +370,11 @@ const CarouselUI = ({
   };
 
   useEffect(() => {
-    if (transitionDuration > 0) {
+    if (
+      transitionDuration > 0 &&
+      trackTransition !== "none" &&
+      !isTransitioning
+    ) {
       setIsTransitioning(true);
     }
   }, [currentSlide.index]);
@@ -419,6 +414,7 @@ const CarouselUI = ({
         >
           <div
             ref={carouselTrackRef}
+            data-testid="carousel-track"
             className={CAROUSEL_TRACK_CLASSNAME}
             style={{
               transition: trackTransition,
@@ -441,10 +437,10 @@ const CarouselUI = ({
               return (
                 <Slide
                   key={`${slide.id}##${slide.indexId}${index.toString(36)}`}
-                  id={`${slide.id}`}
+                  id={`${slide.id}${slide?.isClone ? "#clone" : ""}`}
                   isActive={isSlideActive}
                   className={itemClassName}
-                  index={slide.index}
+                  index={slide.indexId}
                   width={slideWidthPercent}
                   autoFocus={autoFocus}
                   carouselTrackRef={carouselTrackRef}

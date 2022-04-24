@@ -20,6 +20,14 @@ const renderCarouselWithProps = (props, nbSlides = NB_SLIDES) => (
   <Carousel {...props}>{renderSlides(nbSlides)}</Carousel>
 );
 
+// If firing transitionend event is needed we have to correctly define it
+
+// const transitionEndEvent = new Event("transitionend", {
+//   bubbles: true,
+//   cancelable: false,
+// });
+// (transitionEndEvent as any).propertyName = "transform";
+
 const baseProps = {
   autoFocus: true,
   className: "my-carousel",
@@ -101,12 +109,15 @@ describe("Carousel", () => {
       })
     );
 
-    const nextButton = screen.getByRole("button", { name: "Go to next slide" });
+    const nextButton = screen.getByRole("button", {
+      name: "Go to next slide",
+    });
+
     userEvent.click(nextButton);
 
-    const firstSlide = screen.getByTestId("r-r__slide##0");
+    const firstSlide = await screen.findByTestId("r-r__slide##0");
     const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
-    const secondSlide = screen.getByTestId("r-r__slide##1");
+    const secondSlide = await screen.findByTestId("r-r__slide##1");
     const ariaHiddenSecondSlide = secondSlide.getAttribute("aria-hidden");
 
     expect(ariaHiddenFirstSlide).toBe("true");
@@ -288,5 +299,45 @@ describe("Carousel", () => {
       })
     );
     expect(getByTestId("debug-mode-panel")).toBeInTheDocument();
+  });
+
+  it("should return to first slide after clicking next button when carousel is infinite and last slide is reached", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        infinite: true,
+        initialIndex: 6,
+      })
+    );
+
+    const nextButton = screen.getByRole("button", {
+      name: "Go to next slide",
+    });
+    userEvent.click(nextButton);
+
+    const firstSlide = await screen.findByTestId("r-r__slide##0");
+    const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
+
+    expect(ariaHiddenFirstSlide).toBe("false");
+  });
+
+  it("should return to first slide after clicking next button when carousel is infinite and last slide is reached", async () => {
+    await render(
+      renderCarouselWithProps({
+        ...baseProps,
+        loop: true,
+        initialIndex: 6,
+      })
+    );
+
+    const nextButton = screen.getByRole("button", {
+      name: "Go to next slide",
+    });
+    userEvent.click(nextButton);
+
+    const firstSlide = await screen.findByTestId("r-r__slide##0");
+    const ariaHiddenFirstSlide = firstSlide.getAttribute("aria-hidden");
+
+    expect(ariaHiddenFirstSlide).toBe("false");
   });
 });

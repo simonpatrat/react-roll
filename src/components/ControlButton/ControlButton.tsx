@@ -25,7 +25,7 @@ const ControlButton = ({
       onClick={onClick}
       aria-label={ariaLabel || label}
       className={buttonClassNames}
-      disabled={disabled}
+      {...(disabled && { disabled: true })}
     >
       {buttonType === "icon" ? <IconChevron /> : label}
     </button>
