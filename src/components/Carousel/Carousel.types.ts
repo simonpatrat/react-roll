@@ -34,4 +34,5 @@ export interface CarouselProps {
   dotsStyle?: "numbers" | "dots";
   dotsPosition?: "left" | "right" | "center";
   controlButtonType?: "icon" | "text";
+  fullSize?: boolean;
 }

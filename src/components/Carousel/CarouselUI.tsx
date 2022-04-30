@@ -50,6 +50,7 @@ const CarouselUI = ({
   dotsStyle = "numbers",
   dotsPosition = "center",
   controlButtonType = "icon",
+  fullSize,
 }: CarouselProps) => {
   const {
     slides,
@@ -195,14 +196,6 @@ const CarouselUI = ({
     };
   }, [enhancedMediaQueryList, handleMediaQueryChange]);
 
-  const mergedTranslations = useMemo(
-    () => ({
-      ...defaultTranslationsMessages,
-      ...translations,
-    }),
-    [translations]
-  );
-
   useEffect(() => {
     if (didMount.current) {
       if (
@@ -226,6 +219,45 @@ const CarouselUI = ({
   const disableTransition = useCallback(() => {
     setTrackTransition("none");
   }, []);
+
+  const slideWidthPercent = useMemo(
+    () => getSlideWidthPercent(slides),
+    [slides]
+  );
+
+  const findSlideTranslateValue = (slideIndex: number) => {
+    // return slideIndex;
+    return slides.findIndex((slide) => slide.index === slideIndex);
+  };
+
+  useEffect(() => {
+    if (
+      transitionDuration > 0 &&
+      trackTransition !== "none" &&
+      !isTransitioning
+    ) {
+      setIsTransitioning(true);
+    }
+  }, [currentSlide.index]);
+
+  useEffect(() => {
+    const newTranslateValue = findSlideTranslateValue(currentSlide.index);
+
+    setTrackTranslateXValue(-(newTranslateValue * slideWidthPercent));
+  }, [currentSlide.index, slideWidthPercent]);
+
+  useEffect(() => {
+    if (previousIsTouchInteracting && !isTouchInteracting) {
+      const newTranslateValue = findSlideTranslateValue(currentSlide.index);
+      setTrackTranslateXValue(-(newTranslateValue * slideWidthPercent));
+    }
+  }, [
+    previousIsTouchInteracting,
+    isTouchInteracting,
+    setTrackTranslateXValue,
+    currentSlide.index,
+    slideWidthPercent,
+  ]);
 
   const handleDragStart = useCallback(
     (event) => {
@@ -356,52 +388,27 @@ const CarouselUI = ({
     [goTo]
   );
 
+  const mergedTranslations = useMemo(
+    () => ({
+      ...defaultTranslationsMessages,
+      ...translations,
+    }),
+    [translations]
+  );
+
   const carouselClassNames = cls([
     CAROUSEL_CLASSNAME,
     debugMode && CAROUSEL_CLASSNAME_DEBUG_MODE,
     !!className && className,
   ]);
 
-  const slideWidthPercent = getSlideWidthPercent(slides);
-
-  const findSlideTranslateValue = (slideIndex: number) => {
-    // return slideIndex;
-    return slides.findIndex((slide) => slide.index === slideIndex);
-  };
-
-  useEffect(() => {
-    if (
-      transitionDuration > 0 &&
-      trackTransition !== "none" &&
-      !isTransitioning
-    ) {
-      setIsTransitioning(true);
-    }
-  }, [currentSlide.index]);
-
-  useEffect(() => {
-    const newTranslateValue = findSlideTranslateValue(currentSlide.index);
-
-    setTrackTranslateXValue(-(newTranslateValue * slideWidthPercent));
-  }, [currentSlide.index, slideWidthPercent]);
-
-  useEffect(() => {
-    if (previousIsTouchInteracting && !isTouchInteracting) {
-      const newTranslateValue = findSlideTranslateValue(currentSlide.index);
-      setTrackTranslateXValue(-(newTranslateValue * slideWidthPercent));
-    }
-  }, [
-    previousIsTouchInteracting,
-    isTouchInteracting,
-    setTrackTranslateXValue,
-    currentSlide.index,
-    slideWidthPercent,
-  ]);
-
   const transformValue = `translateX(${trackTranslateXValue}%)`;
+  const fullSizeClassName = fullSize
+    ? ` ${CAROUSEL_CLASSNAME}-wrapper--fullsize`
+    : "";
 
   return (
-    <div className={`${CAROUSEL_CLASSNAME}-wrapper`}>
+    <div className={`${CAROUSEL_CLASSNAME}-wrapper${fullSizeClassName}`}>
       <div className={`${CAROUSEL_CLASSNAME}-inner-wrapper`}>
         <div
           className={carouselClassNames}

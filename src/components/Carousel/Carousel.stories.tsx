@@ -57,6 +57,29 @@ const Template2: ComponentStory<typeof Carousel> = (args) => (
   </div>
 );
 
+const Template3: ComponentStory<typeof Carousel> = (args) => (
+  <div
+    style={{
+      width: "100%",
+      height: "100%",
+      margin: "0 auto",
+      position: "relative",
+      paddingBottom: "56.25%",
+    }}
+  >
+    <Carousel {...args}>
+      <ImageBox key="1" index={1} fullSize />
+      <ImageBox key="2" index={2} fullSize />
+      <ImageBox key="3" index={3} fullSize />
+      <ImageBox key="4" index={4} fullSize />
+      <ImageBox key="5" index={5} fullSize />
+      <ImageBox key="6" index={6} fullSize />
+      <ImageBox key="7" index={7} fullSize />
+      <ImageBox key="8" index={8} fullSize />
+    </Carousel>
+  </div>
+);
+
 export const Basic = Template2.bind({});
 
 Basic.args = {
@@ -77,6 +100,12 @@ MultipleSlidesInfinite.args = {
   numVisibleSlides: 3,
   slidePadding: `0.2%`,
   infinite: true,
+};
+
+export const FullSize = Template3.bind({});
+FullSize.args = {
+  ...defaultStoryProps,
+  fullSize: true,
 };
 
 export const MultipleSlidesWithResponsiveOptions = Template1.bind({});

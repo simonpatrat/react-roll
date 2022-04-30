@@ -13,4 +13,5 @@ export const defaultStoryProps = {
   dotsStyle: "dots",
   dotsPosition: "center",
   controlButtonType: "icon",
+  fullScreen: false,
 };

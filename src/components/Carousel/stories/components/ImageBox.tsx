@@ -1,7 +1,14 @@
 import React from "react";
 
-const ImageBox = ({ index }: { index: number }) => {
-  const imgUrl = `https://picsum.photos/id/${index + 110}/1024/576`;
+const ImageBox = ({
+  index,
+  fullSize,
+}: {
+  index: number;
+  fullSize?: boolean;
+}) => {
+  const imageSize = fullSize ? "1920/1080" : "1024/576";
+  const imgUrl = `https://picsum.photos/id/${index + 110}/${imageSize}`;
 
   return (
     <div>
