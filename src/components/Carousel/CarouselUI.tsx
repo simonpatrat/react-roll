@@ -51,6 +51,7 @@ const CarouselUI = ({
   dotsPosition = "center",
   controlButtonType = "icon",
   fullSize,
+  withScrollbar,
 }: CarouselProps) => {
   const {
     slides,
@@ -64,6 +65,7 @@ const CarouselUI = ({
   } = useContext(CarouselContext);
 
   const didMount = useRef(false);
+  const isScrollingTimeout = useRef(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const carouselTrackRef = useRef<HTMLDivElement>(null);
   const carouselOriginCoordinates = useRef<null | { x: number; y: number }>(
@@ -79,6 +81,9 @@ const CarouselUI = ({
   >({});
 
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [isScrolling, setIsScrolling] = useState<boolean>(false);
+  const [isProgrammaticallyScrolling, setIsProgrammaticallyScrolling] =
+    useState<boolean>(false);
 
   const [currentNumberOfVisibleSlides, setCurrentNumberOfVisibleSlides] =
     useState<number>(numVisibleSlides);
@@ -196,8 +201,49 @@ const CarouselUI = ({
     };
   }, [enhancedMediaQueryList, handleMediaQueryChange]);
 
+  const setIsScrollingControlled = useCallback(() => {
+    // Clear our timeout throughout the scroll
+    clearTimeout(isScrollingTimeout.current);
+    setIsScrolling(true);
+    setIsTransitioning(false);
+
+    // Set a timeout to run after scrolling ends
+    isScrollingTimeout.current = setTimeout(() => {
+      setIsScrolling(false);
+      setIsProgrammaticallyScrolling(false);
+      setIsTransitioning(false);
+    }, 66) as unknown as number;
+  }, [isScrollingTimeout, setIsScrolling]);
+
+  const setCarouselScrollLeftPosition = (
+    carouselDOMElement: HTMLDivElement,
+    slideIndex: number
+  ) => {
+    if (carouselDOMElement && !isScrolling) {
+      const slidesDOMElements = Array.from(
+        carouselDOMElement.querySelectorAll("[data-slide-item]")
+      ) as HTMLDivElement[];
+      const currentSlideDOMElement = slidesDOMElements[slideIndex];
+      const newOffsetPosition =
+        currentSlideDOMElement.offsetLeft - carouselDOMElement.offsetLeft;
+
+      setIsProgrammaticallyScrolling(true);
+
+      // eslint-disable-next-line no-param-reassign
+      carouselDOMElement.scrollLeft = newOffsetPosition;
+
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, transitionDuration * 1.2);
+    }
+  };
+
   useEffect(() => {
     if (didMount.current) {
+      if (withScrollbar && carouselRef.current) {
+        setCarouselScrollLeftPosition(carouselRef.current, currentSlide.index);
+      }
+
       if (
         currentSlide &&
         onChangeSlide &&
@@ -226,7 +272,6 @@ const CarouselUI = ({
   );
 
   const findSlideTranslateValue = (slideIndex: number) => {
-    // return slideIndex;
     return slides.findIndex((slide) => slide.index === slideIndex);
   };
 
@@ -286,6 +331,13 @@ const CarouselUI = ({
 
   const handleDragMove = useCallback(
     (event) => {
+      // Disable dragging when scrolling is activated
+      // dragging is ebaled on mobile devices by the scroll
+      // behaviour and managed by css
+      if (withScrollbar) {
+        return;
+      }
+
       if (carouselOriginCoordinates.current) {
         const pressionPoint = event.touches ? event.touches[0] : event;
         const translate = {
@@ -385,8 +437,94 @@ const CarouselUI = ({
     (slideIndex) => {
       goTo(slideIndex);
     },
-    [goTo]
+    [goTo, slides, carouselRef]
   );
+
+  const getSliderSlidesElements = (sliderDOMElement: HTMLDivElement) => {
+    const sliderSlidesElements = sliderDOMElement
+      ? sliderDOMElement.querySelectorAll("[data-slide-item]")
+      : [];
+
+    return Array.from(sliderSlidesElements) as HTMLElement[];
+  };
+
+  const handleSliderScroll = useCallback(
+    (event: React.UIEvent<HTMLElement>) => {
+      setIsScrollingControlled();
+      if (
+        infinite ||
+        loop ||
+        !withScrollbar ||
+        isProgrammaticallyScrolling ||
+        isTransitioning ||
+        !isScrolling
+      ) {
+        return;
+      }
+      setIsTransitioning(false);
+
+      const { currentTarget }: { currentTarget: HTMLElement } = event;
+      const { scrollLeft } = currentTarget;
+
+      if (carouselRef && carouselRef.current) {
+        const sliderSlidesElements = getSliderSlidesElements(
+          carouselRef.current
+        );
+        const carouselOffsetWitdh = carouselRef.current.offsetWidth;
+
+        const sliderItemsDistancesWithCenter = sliderSlidesElements
+          .map((el, index) => {
+            const elCenterPosition = el.offsetLeft + el.offsetWidth / 2;
+            const differenceWithCenter = Math.abs(
+              elCenterPosition - (carouselOffsetWitdh / 2 + scrollLeft)
+            );
+            return {
+              index,
+              differenceWithCenter,
+            };
+          })
+          .sort((a, b) => a.differenceWithCenter - b.differenceWithCenter);
+
+        const currentSlideIndexInView = sliderItemsDistancesWithCenter[0].index;
+
+        goTo(currentSlideIndexInView);
+      }
+    },
+    [
+      carouselRef,
+      setIsTransitioning,
+      setIsScrolling,
+      infinite,
+      loop,
+      withScrollbar,
+      isProgrammaticallyScrolling,
+      goTo,
+      isTransitioning,
+      isScrolling,
+    ]
+  );
+
+  const handleMouseEnterInSliderControls = useCallback(() => {
+    // setIsScrolling(false);
+  }, [setIsScrolling]);
+
+  const handleTouchStartOnSliderControls = useCallback(() => {
+    // setIsScrolling(false);
+  }, [setIsScrolling]);
+
+  const handleMouseLeaveOfCarousel = useCallback(() => {
+    // setIsScrolling(false);
+  }, [setIsScrolling]);
+  const handleTouchEndOnCarousel = useCallback(() => {
+    // setIsScrolling(false);
+  }, [setIsScrolling]);
+
+  const handleTouchStartOnCarousel = useCallback(() => {
+    // setIsScrolling(true);
+  }, [setIsScrolling]);
+  const handleMouseEnterInCarousel = useCallback(() => {
+    // setIsScrolling(true);
+  }, [setIsScrolling]);
 
   const mergedTranslations = useMemo(
     () => ({
@@ -400,6 +538,7 @@ const CarouselUI = ({
     CAROUSEL_CLASSNAME,
     debugMode && CAROUSEL_CLASSNAME_DEBUG_MODE,
     !!className && className,
+    !infinite && !loop && withScrollbar === true && `scrollable`,
   ]);
 
   const transformValue = `translateX(${trackTranslateXValue}%)`;
@@ -418,25 +557,30 @@ const CarouselUI = ({
           style={{
             ...mediaQueryCssStyles,
           }}
+          onScroll={handleSliderScroll}
         >
           <div
             ref={carouselTrackRef}
             data-testid="carousel-track"
             className={CAROUSEL_TRACK_CLASSNAME}
             style={{
-              transition: trackTransition,
-              // || currentSlide.index * slideWidthPercent
-              transform: transformValue,
+              transition: withScrollbar ? "" : trackTransition,
+              transform: withScrollbar ? "" : transformValue,
               width: `${getTrackTotalWidthPercent(slides)}%`,
             }}
-            onTouchStart={handleDragStart}
+            onTouchStart={
+              withScrollbar ? handleTouchStartOnCarousel : handleDragStart
+            }
+            onMouseEnter={handleMouseEnterInCarousel}
             onMouseDown={handleDragStart}
             onTouchMove={handleDragMove}
             onMouseMove={handleDragMove}
-            onTouchEnd={onDragStop}
+            onTouchEnd={withScrollbar ? handleTouchEndOnCarousel : onDragStop}
             onTouchCancel={onDragStop}
             onMouseUp={onDragStop}
-            onMouseLeave={onDragStop}
+            onMouseLeave={
+              withScrollbar ? handleMouseLeaveOfCarousel : onDragStop
+            }
             onTransitionEnd={handleTransitionEnd}
           >
             {slides.map((slide: SlideItem, index) => {
@@ -473,9 +617,10 @@ const CarouselUI = ({
           infinite={infinite}
           hasReachedLastSlide={hasReachedLastSlide}
           disabled={isTransitioning}
+          onMouseEnter={handleMouseEnterInSliderControls}
+          onTouchStart={handleTouchStartOnSliderControls}
         />
       </div>
-
       {dots ? (
         <ul
           role="tablist"
@@ -485,6 +630,8 @@ const CarouselUI = ({
             dotsPosition === "center" && "r-r__dots--center",
             dotsPosition === "right" && "r-r__dots--right",
           ])}
+          onMouseEnter={handleMouseEnterInSliderControls}
+          onTouchStart={handleTouchStartOnSliderControls}
         >
           {slides
             .filter((slide) => !slide.isClone)

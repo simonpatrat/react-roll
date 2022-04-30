@@ -81,9 +81,11 @@ export default function MyCarousel() {
 
 - [ ] Better documentation on props ([see storybook docs](https://simonpatrat.github.io/react-roll/?path=/docs))
 - [ ] Async Slide Component
-- [ ] Full Screen mode
 - [ ] Improve Control buttons (positioning)
 - [x] Typescript
 - [x] scss support
 - [x] Storybook
+- [x] Full size option
+- [x] Infinite slides option
+- [x] Scrollable carousel option
 - [x] Tests

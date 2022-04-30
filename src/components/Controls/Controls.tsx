@@ -15,6 +15,8 @@ const Controls = ({
   hasReachedLastSlide,
   infinite,
   disabled = false,
+  onMouseEnter,
+  onTouchStart,
 }: ControlsProps) => {
   const handleClickNext = useCallback(() => {
     goToNext();
@@ -40,6 +42,9 @@ const Controls = ({
             "controls.buttons.previous.ariaLabel",
             mergedTranslations
           )}
+          onMouseEnter={onMouseEnter}
+          onTouchStart={onTouchStart}
+          disabled={disabled}
         />
       ) : null}
       {loop || infinite || !hasReachedLastSlide ? (
@@ -57,6 +62,8 @@ const Controls = ({
             "controls.buttons.next.ariaLabel",
             mergedTranslations
           )}
+          onMouseEnter={onMouseEnter}
+          onTouchStart={onTouchStart}
           disabled={disabled}
         />
       ) : null}

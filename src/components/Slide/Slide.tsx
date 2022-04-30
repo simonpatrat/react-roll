@@ -78,6 +78,7 @@ const Slide = memo(function Slide({
       data-id={id}
       data-testid={id}
       data-index={index}
+      data-slide-item
       role="group"
       aria-label={`slide ${index + 1}`}
       tabIndex={tabIndex}

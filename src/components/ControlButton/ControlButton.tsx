@@ -10,6 +10,8 @@ const ControlButton = ({
   onClick,
   buttonType = "icon",
   disabled = false,
+  onMouseEnter,
+  onTouchStart,
 }: ControlButtonProps) => {
   const buttonClassNames = cls([
     "r-r__button",
@@ -25,6 +27,8 @@ const ControlButton = ({
       onClick={onClick}
       aria-label={ariaLabel || label}
       className={buttonClassNames}
+      onMouseEnter={onMouseEnter}
+      onTouchStart={onTouchStart}
       {...(disabled && { disabled: true })}
     >
       {buttonType === "icon" ? <IconChevron /> : label}

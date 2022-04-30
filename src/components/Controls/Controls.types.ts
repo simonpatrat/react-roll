@@ -10,6 +10,8 @@ export interface ControlsProps {
   loop: CarouselProps["loop"];
   hasReachedLastSlide: boolean;
   locale: string;
+  onMouseEnter: () => void;
+  onTouchStart: () => void;
   infinite?: boolean;
   disabled?: boolean;
 }

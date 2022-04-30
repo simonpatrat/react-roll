@@ -26,6 +26,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
   dotsPosition = "center",
   controlButtonType = "icon",
   fullSize = false,
+  withScrollbar = false,
 }) => {
   return (
     <CarouselProvider
@@ -56,6 +57,7 @@ const Carousel: React.FunctionComponent<CarouselProps> = ({
         dotsPosition={dotsPosition}
         controlButtonType={controlButtonType}
         fullSize={fullSize}
+        withScrollbar={withScrollbar}
       />
     </CarouselProvider>
   );

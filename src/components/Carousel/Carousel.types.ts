@@ -35,4 +35,5 @@ export interface CarouselProps {
   dotsPosition?: "left" | "right" | "center";
   controlButtonType?: "icon" | "text";
   fullSize?: boolean;
+  withScrollbar?: boolean;
 }

@@ -41,6 +41,26 @@
   * {
     box-sizing: border-box;
   }
+
+  &.scrollable {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: black;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
 }
 
 .r-r__track {
@@ -85,6 +105,10 @@
       &:hover,
       &:focus {
         background: #343434;
+      }
+
+      &:disabled {
+        // background: #ddd;
       }
     }
 
@@ -131,7 +155,7 @@
 
   .r-r__carousel-wrapper--fullsize & {
     position: absolute;
-    bottom: 8px;
+    bottom: 0;
     margin: 0;
     padding: 0;
     left: 50%;
@@ -185,6 +209,29 @@
       & > *.with-number {
         background: #000;
         color: #fff;
+      }
+    }
+  }
+
+  .r-r__carousel-wrapper--fullsize & {
+    .r-r__dot {
+      padding: 4px;
+
+      & > * {
+        background: #fff;
+        &.with-number {
+          background: transparent;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+
+      &--active {
+        & > *,
+        & > *.with-number {
+          background: #000;
+          color: #fff;
+        }
       }
     }
   }

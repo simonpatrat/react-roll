@@ -80,6 +80,26 @@ const Template3: ComponentStory<typeof Carousel> = (args) => (
   </div>
 );
 
+const Template4: ComponentStory<typeof Carousel> = (args) => (
+  <div
+    style={{
+      maxWidth: "95%",
+      margin: "0 auto",
+    }}
+  >
+    <Carousel {...args}>
+      <ImageBox key="1" index={1} />
+      <ImageBox key="2" index={2} />
+      <ImageBox key="3" index={3} />
+      <ImageBox key="4" index={4} />
+      <ImageBox key="5" index={5} />
+      <ImageBox key="6" index={6} />
+      <ImageBox key="7" index={7} />
+      <ImageBox key="8" index={8} />
+    </Carousel>
+  </div>
+);
+
 export const Basic = Template2.bind({});
 
 Basic.args = {
@@ -106,6 +126,38 @@ export const FullSize = Template3.bind({});
 FullSize.args = {
   ...defaultStoryProps,
   fullSize: true,
+};
+
+export const WithScrollBar = Template4.bind({});
+WithScrollBar.args = {
+  ...defaultStoryProps,
+  numVisibleSlides: 3,
+  withScrollbar: true,
+  slidePadding: `0.3%`,
+  dotsStyle: "numbers",
+  dotsPosition: "right",
+};
+
+export const WithScrollBarAndResponsiveOptions = Template4.bind({});
+WithScrollBarAndResponsiveOptions.args = {
+  ...defaultStoryProps,
+  numVisibleSlides: 5,
+  withScrollbar: true,
+  slidePadding: `0.3%`,
+  dotsStyle: "numbers",
+  dotsPosition: "right",
+  responsive: {
+    1680: {
+      numVisibleSlides: 4,
+    },
+    1024: {
+      numVisibleSlides: 3,
+    },
+    768: {
+      numVisibleSlides: 1,
+      paddingRight: "20%",
+    },
+  },
 };
 
 export const MultipleSlidesWithResponsiveOptions = Template1.bind({});
