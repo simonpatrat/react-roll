@@ -81,6 +81,8 @@ const CarouselUI = ({
     Partial<CarouselResponsivePropRules>
   >({});
 
+  const [isDragMoving, setIsDragMoving] = useState(false);
+
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isScrolling, setIsScrolling] = useState<boolean>(false);
   const [isProgrammaticallyScrolling, setIsProgrammaticallyScrolling] =
@@ -326,6 +328,7 @@ const CarouselUI = ({
       setSlidesTabIndex(-1);
       disableTransition();
       carouselOriginCoordinates.current = origin;
+      event.preventDefault(); // stops weird link dragging effect
     },
     [disableTransition]
   );
@@ -386,6 +389,7 @@ const CarouselUI = ({
         differenceBetweenLastTranslateAndCurrentTranslate > 0 &&
         movementAmplitude > 0.07
       ) {
+        setIsDragMoving(true);
         if (lastTranslate.current.x < 0) {
           goToNext();
         } else {
@@ -399,6 +403,7 @@ const CarouselUI = ({
     carouselOriginCoordinates.current = null;
     setTimeout(() => {
       setSlidesTabIndex(0);
+      setIsDragMoving(false);
     }, getTrackTransitionSpeedMs() * 2);
   }, [
     currentSlide?.index,
@@ -408,6 +413,16 @@ const CarouselUI = ({
     getTrackTransitionSpeedMs,
     carouselRef,
   ]);
+
+  const handleClick = useCallback(
+    (event) => {
+      event.stopPropagation();
+      if (isDragMoving) {
+        event?.preventDefault();
+      }
+    },
+    [isDragMoving]
+  );
 
   const handleTransitionEnd = useCallback(
     (event) => {
@@ -598,6 +613,7 @@ const CarouselUI = ({
               withScrollbar ? handleMouseLeaveOfCarousel : onDragStop
             }
             onTransitionEnd={handleTransitionEnd}
+            onClick={handleClick}
           >
             {slides.map((slide: SlideItem, index) => {
               const isSlideActive = slide.id === currentSlide?.id;

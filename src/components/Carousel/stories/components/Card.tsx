@@ -41,6 +41,7 @@ const Card = ({ index }: { index: number }) => {
       </div>
       <div className="card__header">
         <h3 className="card__title">
+          {" "}
           <a href="https://google.com" target="_blank" rel="noreferrer">
             Lorem ipsum dolor sit.
           </a>
