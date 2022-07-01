@@ -40,13 +40,18 @@ const Card = ({ index }: { index: number }) => {
         />
       </div>
       <div className="card__header">
-        <h3 className="card__title">Lorem ipsum dolor sit.</h3>
+        <h3 className="card__title">
+          <a href="https://google.com" target="_blank" rel="noreferrer">
+            Lorem ipsum dolor sit.
+          </a>
+        </h3>
       </div>
       <div className="card__body">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus
         facilis quod architecto asperiores ipsum, ipsa, placeat molestiae rerum
         nulla nobis laboriosam quia a excepturi autem cum odio similique. Soluta
         facere, non ducimus fuga nobis sed praesentium.
+        <button onClick={() => console.log("click")}>Click</button>
       </div>
     </div>
   );

@@ -70,8 +70,6 @@ const Slide = memo(function Slide({
     };
   }, [autoFocus, carouselTrackRef, applyAutoFocus, previousIsActive, isActive, slideRef]);
 
-  const handleMouseDown = useCallback((event) => event.preventDefault(), []);
-
   return (
     <div
       ref={slideRef}
@@ -95,7 +93,6 @@ const Slide = memo(function Slide({
         userSelect: pointerEvents,
       }}
       {...(onLoad && onLoad)}
-      onMouseDown={handleMouseDown}
     >
       {children}
     </div>

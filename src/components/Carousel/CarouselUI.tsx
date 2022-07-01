@@ -72,6 +72,7 @@ const CarouselUI = ({
     null
   );
   const lastTranslate = useRef<null | { x: number; y: number }>(null);
+  const previousTranslateX = usePrevious(lastTranslate?.current?.x || 0);
 
   const [trackTranslateXValue, setTrackTranslateXValue] = useState(0);
   const [slidesTabIndex, setSlidesTabIndex] = useState(0);
@@ -372,7 +373,19 @@ const CarouselUI = ({
       setTrackTransition(`transform ${getTrackTransitionSpeedMs()}ms ease-out`);
       const carouselElementWidth = carouselRef.current.offsetWidth;
 
-      if (Math.abs(lastTranslate.current.x / carouselElementWidth) > 0.07) {
+      const differenceBetweenLastTranslateAndCurrentTranslate =
+        previousTranslateX === undefined
+          ? Math.abs(lastTranslate.current.x)
+          : Math.abs(lastTranslate.current.x - previousTranslateX);
+
+      const movementAmplitude = Math.abs(
+        lastTranslate.current.x / carouselElementWidth
+      );
+
+      if (
+        differenceBetweenLastTranslateAndCurrentTranslate > 0 &&
+        movementAmplitude > 0.07
+      ) {
         if (lastTranslate.current.x < 0) {
           goToNext();
         } else {
@@ -533,21 +546,24 @@ const CarouselUI = ({
     }),
     [translations]
   );
+  const fullSizeClassName = fullSize
+    ? ` ${CAROUSEL_CLASSNAME}-wrapper--fullsize`
+    : "";
+  const carouselWrapperClassNames = cls([
+    `${CAROUSEL_CLASSNAME}-wrapper${fullSizeClassName}`,
+    !!className && className,
+  ]);
 
   const carouselClassNames = cls([
     CAROUSEL_CLASSNAME,
     debugMode && CAROUSEL_CLASSNAME_DEBUG_MODE,
-    !!className && className,
     !infinite && !loop && withScrollbar === true && `scrollable`,
   ]);
 
   const transformValue = `translateX(${trackTranslateXValue}%)`;
-  const fullSizeClassName = fullSize
-    ? ` ${CAROUSEL_CLASSNAME}-wrapper--fullsize`
-    : "";
 
   return (
-    <div className={`${CAROUSEL_CLASSNAME}-wrapper${fullSizeClassName}`}>
+    <div className={carouselWrapperClassNames}>
       <div className={`${CAROUSEL_CLASSNAME}-inner-wrapper`}>
         <div
           className={carouselClassNames}
@@ -598,7 +614,7 @@ const CarouselUI = ({
                   debugMode={debugMode}
                   slidePadding={slidePadding}
                   tabIndex={slidesTabIndex}
-                  pointerEvents={slidesTabIndex === 0 ? undefined : "none"}
+                  // pointerEvents={slidesTabIndex === 0 ? undefined : "none"}
                 >
                   <>{slide.element}</>
                 </Slide>
